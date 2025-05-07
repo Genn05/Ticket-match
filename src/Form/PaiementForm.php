@@ -3,8 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Paiement;
-use App\Entity\ticket;
-use App\Entity\user;
+use App\Entity\Ticket;
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,12 +17,12 @@ class PaiementForm extends AbstractType
         $builder
             ->add('datePaiement')
             ->add('montant')
-            ->add('user', EntityType::class, [
-                'class' => user::class,
+            ->add('user', EntityType::class, [ // Assurez-vous que le nom du champ soit cohérent avec l'entité
+                'class' => User::class,
                 'choice_label' => 'id',
             ])
             ->add('ticket', EntityType::class, [
-                'class' => ticket::class,
+                'class' => Ticket::class, // Utilisez Ticket avec une majuscule
                 'choice_label' => 'id',
             ])
         ;

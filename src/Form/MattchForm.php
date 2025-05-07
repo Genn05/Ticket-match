@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Mattch;
-use App\Entity\stade;
+use App\Entity\Stade;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,7 +18,7 @@ class MattchForm extends AbstractType
             ->add('equipeB')
             ->add('dateMatch')
             ->add('stade', EntityType::class, [
-                'class' => stade::class,
+                'class' => Stade::class,
                 'choice_label' => 'id',
             ])
         ;

@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Contact;
-use App\Entity\user;
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,8 +17,8 @@ class ContactForm extends AbstractType
             ->add('sujet')
             ->add('message')
             ->add('date')
-            ->add('user', EntityType::class, [
-                'class' => user::class,
+            ->add('user', EntityType::class, [  // Remplacer 'User' par 'user' en minuscule
+                'class' => User::class,
                 'choice_label' => 'id',
             ])
         ;

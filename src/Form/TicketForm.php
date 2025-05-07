@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\mattch;
+use App\Entity\Mattch; // Utilise Mattch
 use App\Entity\Ticket;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -17,8 +17,8 @@ class TicketForm extends AbstractType
             ->add('prix')
             ->add('type')
             ->add('quantite')
-            ->add('mattch', EntityType::class, [
-                'class' => mattch::class,
+            ->add('Mattch', EntityType::class, [  // Garde Mattch ici
+                'class' => Mattch::class,  // Référence correcte à l'entité Mattch
                 'choice_label' => 'id',
             ])
         ;
