@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Mattch{% endblock %}
+
+{% block body %}
+    <h1>Create new Mattch</h1>
+
+    {{ include('mattch/_form.html.twig') }}
+
+    <a href="{{ path('app_mattch_index') }}">back to list</a>
+{% endblock %}
