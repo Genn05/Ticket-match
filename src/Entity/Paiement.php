@@ -15,10 +15,10 @@ class Paiement
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'paiements')]
-    private ?user $user = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'paiements')]
-    private ?ticket $ticket = null;
+    private ?Ticket $ticket = null;
 
     #[ORM\Column]
     private ?\DateTime $datePaiement = null;
@@ -31,24 +31,24 @@ class Paiement
         return $this->id;
     }
 
-    public function getUser(): ?user
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?user $user): static
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function getTicket(): ?ticket
+    public function getTicket(): ?Ticket
     {
         return $this->ticket;
     }
 
-    public function setTicket(?ticket $ticket): static
+    public function setTicket(?Ticket $ticket): static
     {
         $this->ticket = $ticket;
 

@@ -17,7 +17,7 @@ class Ticket
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
-    private ?mattch $mattch = null;
+    private ?Mattch $mattch = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $prix = null;
@@ -44,12 +44,12 @@ class Ticket
         return $this->id;
     }
 
-    public function getMattch(): ?mattch
+    public function getMattch(): ?Mattch
     {
         return $this->mattch;
     }
 
-    public function setMattch(?mattch $mattch): static
+    public function setMattch(?Mattch $mattch): static
     {
         $this->mattch = $mattch;
 

@@ -25,7 +25,7 @@ class Mattch
     private ?\DateTime $dateMatch = null;
 
     #[ORM\ManyToOne(inversedBy: 'mattches')]
-    private ?stade $stade = null;
+    private ?Stade $stade = null;
 
     /**
      * @var Collection<int, Ticket>
@@ -79,12 +79,12 @@ class Mattch
         return $this;
     }
 
-    public function getStade(): ?stade
+    public function getStade(): ?Stade
     {
         return $this->stade;
     }
 
-    public function setStade(?stade $stade): static
+    public function setStade(?Stade $stade): static
     {
         $this->stade = $stade;
 
