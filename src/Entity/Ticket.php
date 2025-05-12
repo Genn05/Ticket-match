@@ -16,7 +16,7 @@ class Ticket
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'tickets')]
+    #[ORM\ManyToOne(targetEntity: Mattch::class, inversedBy: 'tickets', cascade: ['remove'])]
     private ?Mattch $mattch = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
@@ -34,10 +34,20 @@ class Ticket
     #[ORM\OneToMany(targetEntity: Paiement::class, mappedBy: 'ticket')]
     private Collection $paiements;
 
+    /**
+     * @var Collection<int, Reservation>
+     */
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'ticket')]
+    private Collection $reservations;
+
     public function __construct()
     {
         $this->paiements = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
+
+    // Getter and setter methods...
+
 
     public function getId(): ?int
     {
@@ -116,6 +126,36 @@ class Ticket
             // set the owning side to null (unless already changed)
             if ($paiement->getTicket() === $this) {
                 $paiement->setTicket(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): static
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setTicket($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): static
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getTicket() === $this) {
+                $reservation->setTicket(null);
             }
         }
 

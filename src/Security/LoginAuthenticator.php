@@ -27,20 +27,21 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
     }
 
     public function authenticate(Request $request): Passport
-    {
-        $email = $request->getPayload()->getString('email');
+{
+    $email = $request->request->get('email'); // <-- CHANGÉ ICI
 
-        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
+    $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
-        return new Passport(
-            new UserBadge($email),
-            new PasswordCredentials($request->getPayload()->getString('password')),
-            [
-                new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
-                new RememberMeBadge(),
-            ]
-        );
-    }
+    return new Passport(
+        new UserBadge($email),
+        new PasswordCredentials($request->request->get('password')), // <-- CHANGÉ ICI
+        [
+            new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')), // <-- CHANGÉ ICI
+            new RememberMeBadge(),
+        ]
+    );
+}
+
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {

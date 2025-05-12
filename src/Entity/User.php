@@ -11,7 +11,6 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -20,18 +19,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180)]
+    #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
-    /**
-     * @var list<string> The user roles
-     */
     #[ORM\Column]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     private ?string $password = null;
 
@@ -41,30 +34,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $prenom = null;
 
-    /**
-     * @var Collection<int, Paiement>
-     */
-    #[ORM\OneToMany(targetEntity: Paiement::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: Paiement::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     private Collection $paiements;
 
-    /**
-     * @var Collection<int, Contact>
-     */
-    #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     private Collection $contacts;
 
     #[ORM\Column]
     private bool $isVerified = false;
 
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private Collection $reservations;
+
+    #[ORM\ManyToOne(inversedBy: 'user')]
+    private ?Profile $profile = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $resetToken = null;
+
     public function __construct()
     {
         $this->paiements = new ArrayCollection();
         $this->contacts = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+        
     }
 
     public function getEmail(): ?string
@@ -79,41 +77,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
-
         return array_unique($roles);
     }
 
-    /**
-     * @param list<string> $roles
-     */
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
-
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): ?string
     {
         return $this->password;
@@ -122,17 +103,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        // Si des données sensibles sont stockées temporairement, elles doivent être effacées ici
     }
 
     public function getNom(): ?string
@@ -143,7 +119,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -155,13 +130,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, Paiement>
-     */
     public function getPaiements(): Collection
     {
         return $this->paiements;
@@ -173,25 +144,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->paiements->add($paiement);
             $paiement->setUser($this);
         }
-
         return $this;
     }
 
     public function removePaiement(Paiement $paiement): static
     {
         if ($this->paiements->removeElement($paiement)) {
-            // set the owning side to null (unless already changed)
             if ($paiement->getUser() === $this) {
                 $paiement->setUser(null);
             }
         }
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, Contact>
-     */
     public function getContacts(): Collection
     {
         return $this->contacts;
@@ -203,19 +168,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->contacts->add($contact);
             $contact->setUser($this);
         }
-
         return $this;
     }
 
     public function removeContact(Contact $contact): static
     {
         if ($this->contacts->removeElement($contact)) {
-            // set the owning side to null (unless already changed)
             if ($contact->getUser() === $this) {
                 $contact->setUser(null);
             }
         }
-
         return $this;
     }
 
@@ -227,7 +189,53 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+        return $this;
+    }
 
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): static
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): static
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            if ($reservation->getUser() === $this) {
+                $reservation->setUser(null);
+            }
+        }
+        return $this;
+    }
+
+    public function getProfile(): ?Profile
+    {
+        return $this->profile;
+    }
+
+    public function setProfile(?Profile $profile): static
+    {
+        $this->profile = $profile;
+
+        return $this;
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(?string $resetToken): static
+    {
+        $this->resetToken = $resetToken;
         return $this;
     }
 }

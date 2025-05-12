@@ -1,13 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Mattch{% endblock %}
+{% block title %}Modifier un Match{% endblock %}
 
 {% block body %}
-    <h1>Edit Mattch</h1>
+    <div class="container my-5">
+        <h1 class="mb-4">Modifier un Match</h1>
 
-    {{ include('mattch/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ include('mattch/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
-    <a href="{{ path('app_mattch_index') }}">back to list</a>
+        <div class="mt-3">
+            <a href="{{ path('app_mattch_index') }}" class="btn btn-secondary">Retour à la liste</a>
+        </div>
 
-    {{ include('mattch/_delete_form.html.twig') }}
+        <div class="mt-3">
+            {{ include('mattch/_delete_form.html.twig') }}
+        </div>
+    </div>
+
+    {% include 'partials/footer.html.twig' %}
 {% endblock %}

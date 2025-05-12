@@ -1,11 +1,64 @@
-<h1>Hi! Please confirm your email!</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmation de votre adresse email</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f9fc;
+            padding: 20px;
+            color: #333;
+        }
 
-<p>
-    Please confirm your email address by clicking the following link: <br><br>
-    <a href="{{ signedUrl|raw }}">Confirm my Email</a>.
-    This link will expire in {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
-</p>
+        .email-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: auto;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
 
-<p>
-    Cheers!
-</p>
+        h1 {
+            color: #007bff;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <h1>Bienvenue sur TicketMatch 🎟️</h1>
+
+        <p>Merci de vous être inscrit !</p>
+        <p>Pour activer votre compte, veuillez confirmer votre adresse email en cliquant sur le lien ci-dessous :</p>
+
+        <a href="{{ signedUrl|raw }}" class="btn">Confirmer mon adresse email</a>
+
+        <p style="margin-top: 20px;">
+            Ce lien expirera dans {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
+        </p>
+
+        <div class="footer">
+            À bientôt sur <strong>TicketMatch</strong> !<br>
+            L’équipe TicketMatch.
+        </div>
+    </div>
+</body>
+</html>

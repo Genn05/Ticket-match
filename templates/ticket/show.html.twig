@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% include 'base.html.twig' %}
 
 {% block title %}Ticket{% endblock %}
 
@@ -31,4 +31,6 @@
     <a href="{{ path('app_ticket_edit', {'id': ticket.id}) }}">edit</a>
 
     {{ include('ticket/_delete_form.html.twig') }}
+{% include 'partials/footer.html.twig' %}
+
 {% endblock %}

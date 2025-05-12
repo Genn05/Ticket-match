@@ -1,23 +1,127 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Inscription - TicketMatch{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .register-container {
+            margin-top: 5rem;
+        }
+
+        .card-header {
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .btn-register {
+            width: 100%;
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .btn-register:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+
+        .alert {
+            margin-bottom: 1rem;
+        }
+
+        .text-center a {
+            color: #007bff;
+        }
+
+        .text-center a:hover {
+            text-decoration: underline;
+        }
+
+        /* Styling for name and surname fields */
+        .form-row {
+            margin-bottom: 1rem;
+        }
+
+        .form-control {
+            border-radius: 0.375rem;
+        }
+
+        .form-row input {
+            width: 100%;
+            padding: 0.75rem;
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
+<div class="container register-container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            {% for flash_error in app.flashes('verify_email_error') %}
+                <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+            {% endfor %}
 
-    <h1>Register</h1>
+            <div class="card shadow-sm border-0">
+                <div class="card-header text-center">
+                    👤 Créer un compte
+                </div>
+                <div class="card-body">
+                    {{ form_start(registrationForm) }}
+                        <div class="mb-3">
+                            {{ form_row(registrationForm.email, {
+                                label: 'Adresse Email',
+                                attr: {'class': 'form-control'}
+                            }) }}
+                        </div>
 
-    {{ form_errors(registrationForm) }}
+                        <div class="mb-3">
+                            {{ form_row(registrationForm.plainPassword, {
+                                label: 'Mot de passe',
+                                attr: {'class': 'form-control'}
+                            }) }}
+                        </div>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+                        <div class="form-row">
+                            {{ form_row(registrationForm.nom, {
+                                label: 'Nom',
+                                attr: {'class': 'form-control'}
+                            }) }}
+                        </div>
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+                        <div class="form-row">
+                            {{ form_row(registrationForm.prenom, {
+                                label: 'Prénom',
+                                attr: {'class': 'form-control'}
+                            }) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_row(registrationForm.agreeTerms, {
+                                label: 'J’accepte les conditions d’utilisation',
+                                attr: {'class': 'form-check-input'}
+                            }) }}
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-register mt-3">S'inscrire</button>
+                    {{ form_end(registrationForm) }}
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <a href="{{ path('app_login') }}">Déjà un compte ? Connectez-vous ici</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'partials/footer.html.twig' %}
 {% endblock %}

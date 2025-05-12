@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\MattchRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MattchRepository::class)]
@@ -32,6 +33,12 @@ class Mattch
      */
     #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'mattch')]
     private Collection $tickets;
+
+#[ORM\Column(type: "string", nullable: true)]
+    private ?string $imageEquipeExterieur = null;
+
+#[ORM\Column(type: "string", nullable: true)]
+    private ?string $imageEquipeDomicile = null;
 
     public function __construct()
     {
@@ -120,4 +127,33 @@ class Mattch
 
         return $this;
     }
+
+    public function getImageEquipeExterieur(): ?string
+    {
+        return $this->imageEquipeExterieur;
+    }
+
+    public function setImageEquipeExterieur(?string $imageEquipeExterieur): static
+    {
+        $this->imageEquipeExterieur = $imageEquipeExterieur;
+
+        return $this;
+    }
+
+    public function getImageEquipeDomicile(): ?string
+    {
+        return $this->imageEquipeDomicile;
+    }
+
+    public function setImageEquipeDomicile(?string $imageEquipeDomicile): static
+    {
+        $this->imageEquipeDomicile = $imageEquipeDomicile;
+
+        return $this;
+    }
+    public function __toString(): string
+{
+    return $this->equipeA . ' vs ' . $this->equipeB . ' - ' . $this->dateMatch->format('d/m/Y H:i');
+}
+
 }

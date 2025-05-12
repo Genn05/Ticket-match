@@ -1,4 +1,41 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {'attr': {'class': 'mb-4'}}) }}
+
+<div class="mb-3">
+    {{ form_label(form.equipeA) }}
+    {{ form_widget(form.equipeA, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.equipeA) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.equipeB) }}
+    {{ form_widget(form.equipeB, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.equipeB) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.dateMatch) }}
+    {{ form_widget(form.dateMatch, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.dateMatch) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.stade) }}
+    {{ form_widget(form.stade, {'attr': {'class': 'form-select'}}) }}
+    {{ form_errors(form.stade) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.imageEquipeDomicile) }}
+    {{ form_widget(form.imageEquipeDomicile, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.imageEquipeDomicile) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.imageEquipeExterieur) }}
+    {{ form_widget(form.imageEquipeExterieur, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.imageEquipeExterieur) }}
+</div>
+
+<button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+
 {{ form_end(form) }}

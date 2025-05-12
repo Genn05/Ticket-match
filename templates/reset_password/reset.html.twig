@@ -1,12 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Reset your password{% endblock %}
+{% block title %}Reset Password{% endblock %}
 
 {% block body %}
-    <h1>Reset your password</h1>
-
-    {{ form_start(resetForm) }}
-        {{ form_row(resetForm.plainPassword) }}
-        <button class="btn btn-primary">Reset password</button>
-    {{ form_end(resetForm) }}
+    <h1>Reset Password</h1>
+    
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger" role="alert">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success" role="alert">{{ message }}</div>
+    {% endfor %}
+    
+    <form method="post">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('reset_password') }}">
+        
+        <div>
+            <label for="password">New Password:</label>
+            <input type="password" id="password" name="password" required minlength="6" placeholder="Enter a new password">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Reset Password</button>
+    </form>
 {% endblock %}

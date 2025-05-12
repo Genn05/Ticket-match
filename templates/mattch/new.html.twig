@@ -1,11 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Mattch{% endblock %}
+{% block title %}Créer un Match{% endblock %}
 
 {% block body %}
-    <h1>Create new Mattch</h1>
-
-    {{ include('mattch/_form.html.twig') }}
-
-    <a href="{{ path('app_mattch_index') }}">back to list</a>
+<div class="container my-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Créer un nouveau match</h4>
+        </div>
+        <div class="card-body">
+            {{ include('mattch/_form.html.twig') }}
+            <a href="{{ path('app_mattch_index') }}" class="btn btn-secondary mt-3">
+                <i class="fas fa-arrow-left me-1"></i> Retour à la liste
+            </a>
+        </div>
+    </div>
+</div>
+{% include 'partials/footer.html.twig' %}
 {% endblock %}

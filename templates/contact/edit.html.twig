@@ -1,13 +1,60 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Contact{% endblock %}
+{% block title %}Modifier un contact{% endblock %}
 
 {% block body %}
-    <h1>Edit Contact</h1>
 
-    {{ include('contact/_form.html.twig', {'button_label': 'Update'}) }}
+<style>
+    .card-header {
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+        padding: 1rem;
+        border-bottom: 1px solid #dee2e6;
+    }
 
-    <a href="{{ path('app_contact_index') }}">back to list</a>
+    .card {
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
 
-    {{ include('contact/_delete_form.html.twig') }}
+    .card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background-color: #f8f9fa;
+    }
+
+    .card-footer .btn {
+        min-width: 150px;
+    }
+
+    .container {
+        margin-top: 3rem;
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    Modifier le contact
+                </div>
+                <div class="card-body">
+                    {{ include('contact/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+                </div>
+                <div class="card-footer">
+                    <a href="{{ path('app_contact_index') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Retour à la liste
+                    </a>
+                    {{ include('contact/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'partials/footer.html.twig' %}
 {% endblock %}

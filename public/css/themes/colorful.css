@@ -1,0 +1,216 @@
+/* Colorful Theme */
+:root {
+  --primary-color: #ff0099;
+  --primary-gradient: linear-gradient(45deg, #ff0099, #493240, #2b5876, #4e4376);
+  --secondary-color: #00f2fe;
+  --text-color: #333;
+  --text-light: #555;
+  --background-color: #f0f2f5;
+  --card-bg: #ffffff;
+  --navbar-bg: linear-gradient(45deg, #ff0099, #493240, #2b5876, #4e4376);
+  --navbar-text: #ffffff;
+  --footer-bg: #2b5876;
+  --footer-text: #ffffff;
+  --footer-link: #00f2fe;
+  --btn-primary-bg: linear-gradient(45deg, #ff0099, #493240);
+  --btn-primary-text: #ffffff;
+  --input-border: #ced4da;
+  --input-focus: rgba(255, 0, 153, 0.25);
+  --category-bg: rgba(255, 0, 153, 0.1);
+  --category-text: #ff0099;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  background-image: linear-gradient(120deg, #f0f2f5 0%, #e0e5ec 100%);
+}
+
+/* Navbar */
+.navbar {
+  background: var(--navbar-bg);
+  animation: gradientBG 15s ease infinite;
+  background-size: 400% 400%;
+}
+
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: var(--navbar-text);
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+  color: #00f2fe;
+}
+
+/* Buttons */
+.btn-primary {
+  background: var(--btn-primary-bg);
+  border: none;
+  color: var(--btn-primary-text);
+  background-size: 200% auto;
+  transition: 0.5s;
+}
+
+.btn-primary:hover {
+  background-position: right center;
+}
+
+.btn-outline-light {
+  color: #fff;
+  border-color: #fff;
+}
+
+.btn-outline-light:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* Cards */
+.card {
+  background-color: var(--card-bg);
+  border: none;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05), 0 6px 6px rgba(0, 0, 0, 0.1);
+}
+
+.event-card {
+  background-color: var(--card-bg);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05), 0 6px 6px rgba(0, 0, 0, 0.1);
+}
+
+.event-card:hover {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Category Pills */
+.category-pill {
+  background: linear-gradient(45deg, rgba(255, 0, 153, 0.1), rgba(0, 242, 254, 0.1));
+  color: var(--category-text);
+}
+
+/* Footer */
+.footer {
+  background: var(--footer-bg);
+  color: var(--footer-text);
+}
+
+.footer a {
+  color: var(--footer-link);
+}
+
+.footer a:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+.social-links a {
+  background: linear-gradient(45deg, rgba(255, 0, 153, 0.8), rgba(0, 242, 254, 0.8));
+  color: #fff;
+}
+
+.social-links a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Forms */
+.form-control, .form-select {
+  border-radius: 1rem;
+  border: 2px solid #eaeaea;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem var(--input-focus);
+}
+
+/* Dropdown */
+.dropdown-menu {
+  background-color: var(--card-bg);
+  border: none;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+}
+
+.dropdown-item {
+  border-radius: 0.5rem;
+}
+
+.dropdown-item:hover {
+  background: linear-gradient(45deg, rgba(255, 0, 153, 0.1), rgba(0, 242, 254, 0.1));
+}
+
+/* Pagination */
+.pagination .page-link {
+  color: var(--primary-color);
+  border-radius: 50%;
+  margin: 0 5px;
+}
+
+.pagination .page-item.active .page-link {
+  background: linear-gradient(45deg, #ff0099, #493240);
+  border: none;
+  color: #fff;
+}
+
+/* Theme Selector */
+.theme-selector {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 1rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Ticket */
+.ticket {
+  background-color: var(--card-bg);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05), 0 6px 6px rgba(0, 0, 0, 0.1);
+}
+
+.ticket::before {
+  opacity: 0.5;
+}
+
+.ticket-header, .ticket-footer {
+  border-color: #eaeaea;
+}
+
+.ticket-qr {
+  border-radius: 1rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Search Results */
+.search-highlight {
+  background: linear-gradient(45deg, rgba(255, 0, 153, 0.2), rgba(0, 242, 254, 0.2));
+  border-radius: 0.3rem;
+}
+
+/* Custom Elements */
+.badge {
+  border-radius: 0.5rem;
+  padding: 0.5em 0.8em;
+}
+
+.badge-primary {
+  background: linear-gradient(45deg, #ff0099, #493240);
+  color: #fff;
+}
+
+.badge-secondary {
+  background: linear-gradient(45deg, #2b5876, #4e4376);
+  color: #fff;
+}

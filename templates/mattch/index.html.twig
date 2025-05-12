@@ -1,39 +1,67 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mattch index{% endblock %}
-
 {% block body %}
-    <h1>Mattch index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>EquipeA</th>
-                <th>EquipeB</th>
-                <th>DateMatch</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for mattch in mattches %}
-            <tr>
-                <td>{{ mattch.id }}</td>
-                <td>{{ mattch.equipeA }}</td>
-                <td>{{ mattch.equipeB }}</td>
-                <td>{{ mattch.dateMatch ? mattch.dateMatch|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_mattch_show', {'id': mattch.id}) }}">show</a>
-                    <a href="{{ path('app_mattch_edit', {'id': mattch.id}) }}">edit</a>
-                </td>
-            </tr>
+<div class="container my-5">
+    <h1 class="mb-4 text-center">Liste des Matchs</h1>
+    <div class="row">
+        {% for match in mattches %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card match-card shadow-sm h-100">
+                    <div class="card-body">
+                        <span class="match-date d-block mb-2 text-muted">
+                            <i class="far fa-calendar-alt me-1"></i>
+                            {{ match.dateMatch ? match.dateMatch|date('d M Y - H:i') : 'Date inconnue' }}
+                        </span>
+                        <h5 class="card-title mb-3 text-primary">Match</h5>
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="text-center">
+                                <img src="{{ asset('uploads/images/' ~ match.imageEquipeDomicile) }}" alt="{{ match.equipeA }}" class="img-thumbnail" style="height: 100px;">
+                                <h6 class="mb-0 fw-bold">{{ match.equipeA }}</h6>
+                            </div>
+                            <div class="vs-badge fw-bold">VS</div>
+                            <div class="text-center">
+                                <img src="{{ asset('uploads/images/' ~ match.imageEquipeExterieur) }}" alt="{{ match.equipeB }}" class="img-thumbnail" style="height: 100px;">
+                                <h6 class="mb-0 fw-bold">{{ match.equipeB }}</h6>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-3 bg-light p-2 rounded">
+                            <i class="fas fa-map-marker-alt me-2 text-danger"></i>
+                            <span class="fw-medium">
+                                {% if match.stade is defined %}
+                                    {{ match.stade.nom }}
+                                {% else %}
+                                    Lieu inconnu
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ path('app_mattch_show', {'id': match.id}) }}" class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-eye me-1"></i> Voir
+                            </a>
+                            {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('app_mattch_edit', {'id': match.id}) }}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-edit me-1"></i> Modifier
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
         {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
+            <div class="col-12">
+                <div class="alert alert-warning text-center">Aucun match trouvé.</div>
+            </div>
         {% endfor %}
-        </tbody>
-    </table>
+    </div>
 
-    <a href="{{ path('app_mattch_new') }}">Create new</a>
+    <div class="text-center mt-4">
+        {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('app_mattch_new') }}" class="btn btn-success">
+            <i class="fas fa-plus me-1"></i> Ajouter un nouveau match
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+{% include 'partials/footer.html.twig' %}
 {% endblock %}

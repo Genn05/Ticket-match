@@ -1,39 +1,62 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Contact index{% endblock %}
+{% block title %}Contact Index{% endblock %}
 
 {% block body %}
-    <h1>Contact index</h1>
+    <h1 class="text-center my-4">Liste des contacts</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Sujet</th>
-                <th>Message</th>
-                <th>Date</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for contact in contacts %}
-            <tr>
-                <td>{{ contact.id }}</td>
-                <td>{{ contact.sujet }}</td>
-                <td>{{ contact.message }}</td>
-                <td>{{ contact.date ? contact.date|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_contact_show', {'id': contact.id}) }}">show</a>
-                    <a href="{{ path('app_contact_edit', {'id': contact.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Contacts</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Sujet</th>
+                                    <th>Message</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for contact in contacts %}
+                                    <tr>
+                                        <td>{{ contact.id }}</td>
+                                        <td>{{ contact.sujet }}</td>
+                                        <td>{{ contact.message }}</td>
+                                        <td>{{ contact.date ? contact.date|date('Y-m-d H:i:s') : '' }}</td>
+                                        <td>
+                                            <a href="{{ path('app_contact_show', {'id': contact.id}) }}" class="btn btn-info btn-sm">
+                                                <i class="fas fa-eye"></i> Voir
+                                            </a>
+                                            <a href="{{ path('app_contact_edit', {'id': contact.id}) }}" class="btn btn-warning btn-sm">
+                                                <i class="fas fa-edit"></i> Modifier
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center">Aucun contact trouvé</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="{{ path('app_contact_new') }}" class="btn btn-primary">
+                            <i class="fas fa-plus-circle me-2"></i> Créer un nouveau contact
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <a href="{{ path('app_contact_new') }}">Create new</a>
+{% include 'partials/footer.html.twig' %}
+
 {% endblock %}

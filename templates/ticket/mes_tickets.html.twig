@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Tickets{% endblock %}
+
+{% block body %}
+    {% include 'partials/nav.html.twig' %}
+
+    {% if app.user %}
+        <div class="container mt-5">
+            <h1 class="text-center">Bienvenue {{ app.user.nom }} !</h1>
+        </div>
+    {% endif %}
+
+    {% if is_granted('ROLE_USER') %}
+        <div class="container py-4">
+            <h1 class="mb-4">Mes Tickets</h1>
+
+            {% if reservations is empty %}
+                <div class="alert alert-info">Vous n'avez encore réservé aucun ticket.</div>
+            {% else %}
+                <table class="table table-striped table-hover table-bordered align-middle">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Match</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Stade</th>
+                            <th scope="col">Prix</th>
+                            <th scope="col">Quantité</th>
+                            <th scope="col">Statut Paiement</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for reservation in reservations %}
+                        <tr>
+                            <th scope="row" class="text-center">{{ loop.index }}</th>
+                            <td>
+                                {% if reservation.ticket and reservation.ticket.mattch %}
+                                    {{ reservation.ticket.mattch.equipeA }} vs {{ reservation.ticket.mattch.equipeB }}
+                                {% else %}
+                                    <span class="text-danger">Données manquantes</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                {% if reservation.ticket and reservation.ticket.mattch %}
+                                    {{ reservation.ticket.mattch.dateMatch|date('d/m/Y H:i') }}
+                                {% else %}
+                                    <span class="text-danger">Données manquantes</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if reservation.ticket and reservation.ticket.mattch and reservation.ticket.mattch.stade %}
+                                    {{ reservation.ticket.mattch.stade.nom }}
+                                {% else %}
+                                    <span class="text-danger">Données manquantes</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end">
+                                {% if reservation.ticket %}
+                                    {{ reservation.ticket.prix }} €
+                                {% else %}
+                                    <span class="text-danger">Données manquantes</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">{{ reservation.quantite }}</td>
+                            <td class="text-center">
+                                {% set paiement = paiementsByReservation[reservation.id] ?? null %}
+                                {% if paiement %}
+                                    {% if paiement.status == 'Payé' %}
+                                        <span class="badge bg-success">Payé</span>
+                                    {% else %}
+                                        <span class="badge bg-warning text-dark">{{ paiement.status }}</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="badge bg-secondary">Non payé</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                {% set paiement = paiementsByReservation[reservation.id] ?? null %}
+                                {% if paiement and paiement.status == 'Payé' %}
+                                    <button class="btn btn-success btn-sm me-2" disabled>
+                                        <i class="fas fa-credit-card"></i> Payé
+                                    </button>
+                                {% else %}
+                                    <a href="{{ path('app_paiement', {'reservationId': reservation.id}) }}" class="btn btn-success btn-sm me-2">
+                                        <i class="fas fa-credit-card"></i> Payer
+                                    </a>
+                                {% endif %}
+                                <form method="post"
+                                      action="{{ path('app_reservation_delete', {'id': reservation.id}) }}"
+                                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?');"
+                                      class="d-inline-flex align-items-center gap-2 mt-1 justify-content-center">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reservation.id) }}">
+                                    
+                                    <label for="quantity_to_delete_{{ reservation.id }}" class="form-label visually-hidden">Quantité à supprimer :</label>
+                                    <input id="quantity_to_delete_{{ reservation.id }}" type="number" name="quantity_to_delete"
+                                           min="1" max="{{ reservation.quantite }}" value="1"
+                                           class="form-control form-control-sm" style="width: 80px;">
+                                        
+                                    <button class="btn btn-danger btn-sm" type="submit">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="alert alert-danger">
+            Vous devez être connecté pour accéder à cette page.
+        </div>
+        <a href="{{ path('app_login') }}" class="btn btn-primary mt-3">Se connecter</a>
+    {% endif %}
+    {% include 'partials/footer.html.twig' %}
+{% endblock %}

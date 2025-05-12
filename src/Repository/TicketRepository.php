@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Repository;
+use App\Entity\User;
 
 use App\Entity\Ticket;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -15,6 +16,15 @@ class TicketRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Ticket::class);
     }
+    public function findTicketsByUser(User $user): array
+{
+    return $this->createQueryBuilder('t')
+        ->join('t.reservations', 'r')
+        ->where('r.user = :user')
+        ->setParameter('user', $user)
+        ->getQuery()
+        ->getResult();
+}
 
     //    /**
     //     * @return Ticket[] Returns an array of Ticket objects

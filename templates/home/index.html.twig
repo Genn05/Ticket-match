@@ -1,0 +1,129 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - TicketMatch{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        .ticket-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .ticket-card:hover {
+            transform: scale(1.05);
+        }
+
+        .ticket-header {
+            background-color: #f8f9fa;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .ticket-body {
+            padding: 15px;
+        }
+
+        .match-info {
+            margin-bottom: 15px;
+        }
+
+        .match-teams {
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+    
+        .ticket-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .btn-reserve {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .btn-reserve:hover {
+            background-color: #0056b3;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #6c757d;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+    <div class="container py-5">
+        <h1 class="page-title text-center">🎟️ Nos Tickets disponibles</h1>
+
+        <div class="row">
+            {% for ticket in tickets %}
+                <div class="col-md-4 mb-4">
+                    <div class="ticket-card">
+                        <div class="ticket-header">
+                            <h5 class="mb-0">{{ ticket.type|capitalize }}</h5>
+                        </div>
+                        <div class="ticket-body">
+                            <div class="match-info">
+                                <div class="match-date">
+                                    <i class="far fa-calendar-alt me-1"></i> 
+                                    {{ ticket.mattch.dateMatch|date('d/m/Y H:i') }}
+                                </div>
+                                <div class="match-teams">
+                                    {{ ticket.mattch.equipeA }} vs {{ ticket.mattch.equipeB }}
+                                </div>
+                                <div class="stadium-info mt-2">
+                                    <i class="fas fa-map-marker-alt me-2 text-muted"></i>
+                                    {{ ticket.mattch.stade.nom }}
+                                </div>
+                            </div>
+                            
+
+                            <div class="ticket-info">
+                                <div>
+                                    <div class="text-muted mb-1">Quantité</div>
+                                    <div class="fw-bold">{{ ticket.quantite }}</div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="text-muted mb-1">Prix</div>
+                                    <div class="ticket-price">{{ ticket.prix }} €</div>
+                                </div>
+                            </div>
+                            
+                            <a href="{{ path('app_reservation', { id: ticket.id }) }}" class="btn btn-reserve w-100">
+                                <i class="fas fa-ticket-alt me-2"></i> Réserver
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <div class="empty-message">
+                        <i class="fas fa-ticket-alt fa-2x mb-3"></i>
+                        <h4>Aucun ticket disponible pour le moment.</h4>
+                        <p class="mb-0">Revenez bientôt pour découvrir nos prochains événements.</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% include 'partials/footer.html.twig' %}
+
+{% endblock %}

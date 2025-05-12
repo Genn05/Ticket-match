@@ -2,12 +2,57 @@
 
 {% block title %}Edit Ticket{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #1f6391;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
-    <h1>Edit Ticket</h1>
+    {% if is_granted('ROLE_ADMIN') %}
+        <h1>Edit Ticket</h1>
 
-    {{ include('ticket/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ include('ticket/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_ticket_index') }}">back to list</a>
+        <a href="{{ path('app_ticket_index') }}">Back to list</a>
 
-    {{ include('ticket/_delete_form.html.twig') }}
+        {{ include('ticket/_delete_form.html.twig') }}
+    {% else %}
+        <div class="alert alert-danger">
+            Vous n'avez pas la permission d'accéder à cette page.
+        </div>
+        <a href="{{ path('home') }}" class="btn btn-primary mt-3">Retour à l'accueil</a>
+    {% endif %}
+    {% include 'partials/footer.html.twig' %}
 {% endblock %}

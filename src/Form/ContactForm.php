@@ -19,7 +19,7 @@ class ContactForm extends AbstractType
             ->add('date')
             ->add('user', EntityType::class, [  // Remplacer 'User' par 'user' en minuscule
                 'class' => User::class,
-                'choice_label' => 'id',
+                'choice_label' => 'email',
             ])
         ;
     }

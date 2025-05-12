@@ -1,0 +1,104 @@
+   <!-- Sélecteur de thème -->
+        <div class="theme-selector" id="themeToggle">
+            <i class="fas fa-palette"></i>
+        </div>
+
+        <div class="theme-panel" id="themePanel">
+            <h5 class="mb-3">Choisir un thème</h5>
+            <div class="theme-options">
+                <button class="theme-btn theme-blue-purple active" data-primary="#4361ee" data-secondary="#3a0ca3" data-accent="#f72585" data-warning="#ffbe0b"></button>
+                <button class="theme-btn theme-green-teal" data-primary="#2b9348" data-secondary="#006466" data-accent="#e9c46a" data-warning="#e76f51"></button>
+                <button class="theme-btn theme-orange-red" data-primary="#fb8500" data-secondary="#d62828" data-accent="#ffb703" data-warning="#8ecae6"></button>
+                <button class="theme-btn theme-pink-purple" data-primary="#f72585" data-secondary="#7209b7" data-accent="#4cc9f0" data-warning="#ffbe0b"></button>
+                <button class="theme-btn theme-blue-teal" data-primary="#0077b6" data-secondary="#023e8a" data-accent="#00b4d8" data-warning="#ffb703"></button>
+                <button class="theme-btn theme-black-gold" data-primary="#2b2d42" data-secondary="#1a1a2e" data-accent="#ffd60a" data-warning="#e9c46a"></button>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Activer les tooltips Bootstrap
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+            
+            // Animation pour les cartes de match
+            const matchCards = document.querySelectorAll('.match-card');
+            matchCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px)';
+                    this.style.boxShadow = '0 15px 30px rgba(0,0,0,0.2)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 6px 15px rgba(0,0,0,0.1)';
+                });
+            });
+            
+            // Sélecteur de thème
+            const themeToggle = document.getElementById('themeToggle');
+            const themePanel = document.getElementById('themePanel');
+            const themeButtons = document.querySelectorAll('.theme-btn');
+            
+            // Ouvrir/fermer le panneau de thème
+            themeToggle.addEventListener('click', function() {
+                themePanel.classList.toggle('active');
+            });
+            
+            // Fermer le panneau en cliquant ailleurs
+            document.addEventListener('click', function(e) {
+                if (!themePanel.contains(e.target) && e.target !== themeToggle) {
+                    themePanel.classList.remove('active');
+                }
+            });
+            
+            // Changer de thème
+            themeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Mettre à jour les variables CSS
+                    document.documentElement.style.setProperty('--primary-color', this.getAttribute('data-primary'));
+                    document.documentElement.style.setProperty('--secondary-color', this.getAttribute('data-secondary'));
+                    document.documentElement.style.setProperty('--accent-color', this.getAttribute('data-accent'));
+                    document.documentElement.style.setProperty('--warning-color', this.getAttribute('data-warning'));
+                    
+                    // Mettre à jour le bouton actif
+                    themeButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Sauvegarder le thème dans localStorage
+                    localStorage.setItem('ticketmatch-theme', JSON.stringify({
+                        primary: this.getAttribute('data-primary'),
+                        secondary: this.getAttribute('data-secondary'),
+                        accent: this.getAttribute('data-accent'),
+                        warning: this.getAttribute('data-warning')
+                    }));
+                });
+            });
+            
+            // Charger le thème sauvegardé
+            const savedTheme = localStorage.getItem('ticketmatch-theme');
+            if (savedTheme) {
+                const theme = JSON.parse(savedTheme);
+                document.documentElement.style.setProperty('--primary-color', theme.primary);
+                document.documentElement.style.setProperty('--secondary-color', theme.secondary);
+                document.documentElement.style.setProperty('--accent-color', theme.accent);
+                document.documentElement.style.setProperty('--warning-color', theme.warning);
+                
+                // Trouver et activer le bouton correspondant
+                themeButtons.forEach(button => {
+                    if (button.getAttribute('data-primary') === theme.primary) {
+                        button.classList.add('active');
+                    } else {
+                        button.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>

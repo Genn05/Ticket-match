@@ -1,34 +1,46 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mattch{% endblock %}
+{% block title %}Détail du Match{% endblock %}
 
 {% block body %}
-    <h1>Mattch</h1>
+<div class="container my-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Détail du Match</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ mattch.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Équipe A</th>
+                        <td>{{ mattch.equipeA }}</td>
+                    </tr>
+                    <tr>
+                        <th>Équipe B</th>
+                        <td>{{ mattch.equipeB }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date du match</th>
+                        <td>{{ mattch.dateMatch ? mattch.dateMatch|date('d/m/Y H:i') : 'Non définie' }}</td>
+                    </tr>
+                </tbody>
+            </table>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ mattch.id }}</td>
-            </tr>
-            <tr>
-                <th>EquipeA</th>
-                <td>{{ mattch.equipeA }}</td>
-            </tr>
-            <tr>
-                <th>EquipeB</th>
-                <td>{{ mattch.equipeB }}</td>
-            </tr>
-            <tr>
-                <th>DateMatch</th>
-                <td>{{ mattch.dateMatch ? mattch.dateMatch|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_mattch_index') }}">back to list</a>
-
-    <a href="{{ path('app_mattch_edit', {'id': mattch.id}) }}">edit</a>
-
-    {{ include('mattch/_delete_form.html.twig') }}
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{{ path('app_mattch_index') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Retour à la liste
+                </a>
+                <a href="{{ path('app_mattch_edit', {'id': mattch.id}) }}" class="btn btn-outline-primary">
+                    <i class="fas fa-edit me-1"></i> Modifier
+                </a>
+                {{ include('mattch/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'partials/footer.html.twig' %}
 {% endblock %}

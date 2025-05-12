@@ -2,18 +2,25 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+
 use App\Entity\Ticket;
 use App\Form\TicketForm;
+use App\Repository\ReservationRepository;
 use App\Repository\TicketRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
 
 #[Route('/ticket')]
 final class TicketController extends AbstractController
 {
+    // Afficher la liste de tous les tickets
     #[Route(name: 'app_ticket_index', methods: ['GET'])]
     public function index(TicketRepository $ticketRepository): Response
     {
@@ -22,9 +29,63 @@ final class TicketController extends AbstractController
         ]);
     }
 
+    #[Route('/user/{id}/reservations', name: 'app_user_reservations', methods: ['GET'])]
+    public function userReservations(User $user): Response
+    {
+        $reservations = $user->getReservations();
+
+        // Extract tickets from reservations
+        $tickets = [];
+        foreach ($reservations as $reservation) {
+            $tickets[] = $reservation->getTicket();
+        }
+
+        return $this->render('ticket/reservations.html.twig', [
+            'user' => $user,
+            'tickets' => $tickets,
+        ]);
+    }
+
+    #[Route('/reservation/{id}/delete', name: 'app_reservation_delete', methods: ['POST'])]
+    public function deleteReservation(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $reservation = $entityManager->getRepository(\App\Entity\Reservation::class)->find($id);
+
+        if (!$reservation) {
+            throw $this->createNotFoundException('Réservation non trouvée.');
+        }
+
+        if ($this->isCsrfTokenValid('delete' . $reservation->getId(), $request->request->get('_token'))) {
+            $quantityToDelete = (int) $request->request->get('quantity_to_delete', 1);
+            $currentQuantity = $reservation->getQuantite();
+
+            // Update the global ticket quantity by adding back the deleted quantity
+            $ticket = $reservation->getTicket();
+            $ticket->setQuantite($ticket->getQuantite() + $quantityToDelete);
+            $entityManager->persist($ticket);
+
+            if ($quantityToDelete >= $currentQuantity) {
+                // Delete the entire reservation
+                $entityManager->remove($reservation);
+            } else {
+                // Reduce the quantity of the reservation
+                $reservation->setQuantite($currentQuantity - $quantityToDelete);
+                $entityManager->persist($reservation);
+            }
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_mes_tickets');
+    }
+
+    // Créer un nouveau ticket
     #[Route('/new', name: 'app_ticket_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+         if (!$this->isGranted('ROLE_ADMIN')) {
+        throw new AccessDeniedException('Vous n\'êtes pas autorisé à modifier ce ticket.');
+    }
+
         $ticket = new Ticket();
         $form = $this->createForm(TicketForm::class, $ticket);
         $form->handleRequest($request);
@@ -42,6 +103,39 @@ final class TicketController extends AbstractController
         ]);
     }
 
+    // Afficher les tickets réservés par l'utilisateur connecté
+ #[Route('/mes-tickets', name: 'app_mes_tickets')]
+public function mesTickets(Security $security, \App\Repository\PaiementRepository $paiementRepository): Response
+{
+    $user = $security->getUser();
+
+    if (!$user instanceof \App\Entity\User) {
+        return $this->redirectToRoute('app_home');
+    }
+
+    $reservations = $user->getReservations();
+
+    $tickets = [];
+    $paiementsByReservation = [];
+
+    foreach ($reservations as $reservation) {
+        if ($reservation->getTicket()) {
+            $tickets[] = $reservation->getTicket();
+        }
+        // Fetch payment for this reservation
+        $paiement = $paiementRepository->findOneBy(['reservation' => $reservation]);
+        $paiementsByReservation[$reservation->getId()] = $paiement;
+    }
+
+    return $this->render('ticket/mes_tickets.html.twig', [
+        'tickets' => $tickets,
+        'paiementsByReservation' => $paiementsByReservation,
+        'reservations' => $reservations,
+    ]);
+}
+
+
+    // Afficher un ticket spécifique
     #[Route('/{id}', name: 'app_ticket_show', methods: ['GET'])]
     public function show(Ticket $ticket): Response
     {
@@ -50,9 +144,15 @@ final class TicketController extends AbstractController
         ]);
     }
 
+    // Modifier un ticket
     #[Route('/{id}/edit', name: 'app_ticket_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Ticket $ticket, EntityManagerInterface $entityManager): Response
     {
+
+         if (!$this->isGranted('ROLE_ADMIN')) {
+        throw new AccessDeniedException('Vous n\'êtes pas autorisé à modifier ce ticket.');
+    }
+
         $form = $this->createForm(TicketForm::class, $ticket);
         $form->handleRequest($request);
 
@@ -68,10 +168,16 @@ final class TicketController extends AbstractController
         ]);
     }
 
+    // Supprimer un ticket
     #[Route('/{id}', name: 'app_ticket_delete', methods: ['POST'])]
     public function delete(Request $request, Ticket $ticket, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$ticket->getId(), $request->getPayload()->getString('_token'))) {
+        // Vérification du token CSRF
+        if ($this->isCsrfTokenValid('delete' . $ticket->getId(), $request->request->get('_token'))) {
+            // Remove related reservations first to avoid foreign key constraint violation
+            foreach ($ticket->getReservations() as $reservation) {
+                $entityManager->remove($reservation);
+            }
             $entityManager->remove($ticket);
             $entityManager->flush();
         }

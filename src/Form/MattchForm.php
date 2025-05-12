@@ -6,8 +6,10 @@ use App\Entity\Mattch;
 use App\Entity\Stade;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class MattchForm extends AbstractType
 {
@@ -19,9 +21,32 @@ class MattchForm extends AbstractType
             ->add('dateMatch')
             ->add('stade', EntityType::class, [
                 'class' => Stade::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
             ])
-        ;
+            ->add('imageEquipeDomicile', FileType::class, [
+                'label' => 'Logo Équipe Domicile',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2M',
+                        'mimeTypes' => ['image/jpeg', 'image/png'],
+                        'mimeTypesMessage' => 'Veuillez uploader une image valide (JPEG/PNG)',
+                    ]),
+                ],
+            ])
+            ->add('imageEquipeExterieur', FileType::class, [
+                'label' => 'Logo Équipe Extérieure',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2M',
+                        'mimeTypes' => ['image/jpeg', 'image/png'],
+                        'mimeTypesMessage' => 'Veuillez uploader une image valide (JPEG/PNG)',
+                    ]),
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

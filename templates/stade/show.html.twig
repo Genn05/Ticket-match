@@ -27,8 +27,8 @@
     </table>
 
     <a href="{{ path('app_stade_index') }}">back to list</a>
-
+{% if is_granted('ROLE_ADMIN') %}
     <a href="{{ path('app_stade_edit', {'id': stade.id}) }}">edit</a>
-
-    {{ include('stade/_delete_form.html.twig') }}
+      {{ include('stade/_delete_form.html.twig') }}
+ {% endif %}  
 {% endblock %}

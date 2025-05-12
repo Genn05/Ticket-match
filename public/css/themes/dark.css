@@ -1,0 +1,181 @@
+/* Dark Theme */
+:root {
+  --primary-color: #bb86fc;
+  --primary-gradient: linear-gradient(135deg, #bb86fc, #3700b3);
+  --secondary-color: #03dac6;
+  --text-color: #e0e0e0;
+  --text-light: #b0b0b0;
+  --background-color: #121212;
+  --card-bg: #1e1e1e;
+  --navbar-bg: #1a1a1a;
+  --navbar-text: #e0e0e0;
+  --footer-bg: #1a1a1a;
+  --footer-text: #e0e0e0;
+  --footer-link: #bb86fc;
+  --btn-primary-bg: #bb86fc;
+  --btn-primary-text: #121212;
+  --input-border: #333;
+  --input-focus: rgba(187, 134, 252, 0.25);
+  --category-bg: rgba(187, 134, 252, 0.2);
+  --category-text: #bb86fc;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+/* Navbar */
+.navbar {
+  background: var(--navbar-bg);
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: var(--navbar-text);
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+  color: var(--primary-color);
+}
+
+/* Buttons */
+.btn-primary {
+  background: var(--btn-primary-bg);
+  border: none;
+  color: var(--btn-primary-text);
+}
+
+.btn-outline-light {
+  color: var(--text-color);
+  border-color: var(--text-color);
+}
+
+.btn-outline-light:hover {
+  background-color: rgba(224, 224, 224, 0.1);
+  color: var(--text-color);
+}
+
+/* Cards */
+.card {
+  background-color: var(--card-bg);
+  border-color: #333;
+}
+
+.event-card {
+  background-color: var(--card-bg);
+  border: 1px solid #333;
+}
+
+.event-card .card-text {
+  color: var(--text-light);
+}
+
+/* Category Pills */
+.category-pill {
+  background-color: var(--category-bg);
+  color: var(--category-text);
+}
+
+/* Footer */
+.footer {
+  background-color: var(--footer-bg);
+  color: var(--footer-text);
+}
+
+.footer a {
+  color: var(--footer-link);
+}
+
+.footer a:hover {
+  color: #fff;
+}
+
+.social-links a {
+  background-color: rgba(187, 134, 252, 0.2);
+  color: var(--primary-color);
+}
+
+.social-links a:hover {
+  background-color: var(--primary-color);
+  color: #121212;
+}
+
+/* Forms */
+.form-control, .form-select {
+  background-color: #2d2d2d;
+  border-color: var(--input-border);
+  color: var(--text-color);
+}
+
+.form-control:focus, .form-select:focus {
+  background-color: #2d2d2d;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem var(--input-focus);
+  color: var(--text-color);
+}
+
+.form-control::placeholder {
+  color: #888;
+}
+
+/* Dropdown */
+.dropdown-menu {
+  background-color: #2d2d2d;
+  border-color: #333;
+}
+
+.dropdown-item {
+  color: var(--text-color);
+}
+
+.dropdown-item:hover {
+  background-color: rgba(187, 134, 252, 0.2);
+  color: var(--text-color);
+}
+
+.dropdown-divider {
+  border-color: #444;
+}
+
+/* Pagination */
+.pagination .page-link {
+  background-color: #2d2d2d;
+  border-color: #333;
+  color: var(--primary-color);
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #121212;
+}
+
+/* Alerts */
+.alert {
+  background-color: #2d2d2d;
+  color: var(--text-color);
+}
+
+/* Theme Selector */
+.theme-selector {
+  background-color: rgba(30, 30, 30, 0.8);
+}
+
+/* Ticket */
+.ticket {
+  background-color: var(--card-bg);
+  border: 1px solid #333;
+}
+
+.ticket-header, .ticket-footer {
+  border-color: #333;
+}
+
+.ticket-qr {
+  background-color: #2d2d2d;
+}
+
+/* Search Results */
+.search-highlight {
+  background-color: rgba(187, 134, 252, 0.3);
+}

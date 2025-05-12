@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réservation - TicketMatch{% endblock %}
+
+{% block main %}
+    <h1 class="mb-4">Réserver un ticket</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ ticket.type }} - {{ ticket.prix }} €</h5>
+            {{ form_start(form) }}
+                {{ form_row(form.quantite) }}
+                <button class="btn btn-success">Valider la réservation</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% include 'partials/footer.html.twig' %}
+
+{% endblock %}
