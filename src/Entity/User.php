@@ -52,11 +52,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?string $resetToken = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Card::class, cascade: ['persist', 'remove'])]
+    private Collection $cards;
+
     public function __construct()
     {
         $this->paiements = new ArrayCollection();
         $this->contacts = new ArrayCollection();
         $this->reservations = new ArrayCollection();
+        $this->cards = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -236,6 +240,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setResetToken(?string $resetToken): static
     {
         $this->resetToken = $resetToken;
+        return $this;
+    }
+
+    public function getCards(): Collection
+    {
+        return $this->cards;
+    }
+
+    public function addCard(Card $card): static
+    {
+        if (!$this->cards->contains($card)) {
+            $this->cards->add($card);
+            $card->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCard(Card $card): static
+    {
+        if ($this->cards->removeElement($card)) {
+            // Set the owning side to null (unless already changed)
+            if ($card->getUser() === $this) {
+                $card->setUser(null);
+            }
+        }
+
         return $this;
     }
 }

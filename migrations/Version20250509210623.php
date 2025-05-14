@@ -19,10 +19,17 @@ final class Version20250509210623 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql(<<<'SQL'
-            ALTER TABLE mattch ADD image_equipe_exterieur LONGTEXT DEFAULT NULL, ADD image_equipe_domicile LONGTEXT DEFAULT NULL
-        SQL);
+        // Check if the columns 'image_equipe_exterieur' and 'image_equipe_domicile' exist before adding them
+        $schemaManager = $this->connection->createSchemaManager();
+        $columns = $schemaManager->listTableColumns('mattch');
+
+        if (!array_key_exists('image_equipe_exterieur', $columns)) {
+            $this->addSql("ALTER TABLE mattch ADD image_equipe_exterieur LONGTEXT DEFAULT NULL");
+        }
+
+        if (!array_key_exists('image_equipe_domicile', $columns)) {
+            $this->addSql("ALTER TABLE mattch ADD image_equipe_domicile LONGTEXT DEFAULT NULL");
+        }
     }
 
     public function down(Schema $schema): void

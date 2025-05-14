@@ -4,6 +4,25 @@
 
 {% block body %}
 <div class="container my-5">
+    <style>
+        .card {
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .btn {
+            margin-top: 10px;
+        }
+    </style>
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white">
             <h4 class="mb-0">Créer un nouveau match</h4>
@@ -16,5 +35,4 @@
         </div>
     </div>
 </div>
-{% include 'partials/footer.html.twig' %}
 {% endblock %}

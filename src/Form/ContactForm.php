@@ -17,10 +17,7 @@ class ContactForm extends AbstractType
             ->add('sujet')
             ->add('message')
             ->add('date')
-            ->add('user', EntityType::class, [  // Remplacer 'User' par 'user' en minuscule
-                'class' => User::class,
-                'choice_label' => 'email',
-            ])
+            // Removed the 'user' field as it will be set automatically in the controller
         ;
     }
 

@@ -19,10 +19,12 @@ final class Version20250512182145 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql(<<<'SQL'
-            ALTER TABLE user ADD reset_token VARCHAR(255) DEFAULT NULL
-        SQL);
+        // Check if the column 'reset_token' exists before adding it
+        $schemaManager = $this->connection->createSchemaManager();
+        $columns = $schemaManager->listTableColumns('user');
+        if (!array_key_exists('reset_token', $columns)) {
+            $this->addSql("ALTER TABLE user ADD reset_token VARCHAR(255) DEFAULT NULL");
+        }
     }
 
     public function down(Schema $schema): void

@@ -4,7 +4,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <style>
+    <!-- Styles centralisés dans app.css -->
         h1 {
             color: #2c3e50;
             margin-bottom: 20px;
@@ -36,23 +36,53 @@
         button:hover {
             background-color: #1f6391;
         }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .form-container a {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        .form-container a:hover {
+            text-decoration: underline;
+        }
     </style>
 {% endblock %}
 
+
+
 {% block body %}
     {% if is_granted('ROLE_ADMIN') %}
-        <h1>Edit Ticket</h1>
-
-        {{ include('ticket/_form.html.twig', {'button_label': 'Update'}) }}
-
-        <a href="{{ path('app_ticket_index') }}">Back to list</a>
-
-        {{ include('ticket/_delete_form.html.twig') }}
+        <div class="card form-container">
+            <div class="card-header">
+                <h1>Edit Ticket</h1>
+            </div>
+            <div class="card-body">
+                {{ include('ticket/_form.html.twig', {'button_label': 'Update'}) }}
+                <a href="{{ path('app_ticket_index') }}" class="btn btn-secondary mt-3">Back to list</a>
+                {{ include('ticket/_delete_form.html.twig') }}
+            </div>
+        </div>
     {% else %}
         <div class="alert alert-danger">
             Vous n'avez pas la permission d'accéder à cette page.
         </div>
         <a href="{{ path('home') }}" class="btn btn-primary mt-3">Retour à l'accueil</a>
     {% endif %}
-    {% include 'partials/footer.html.twig' %}
 {% endblock %}

@@ -1,41 +1,34 @@
 <style>
-    /* Reset de base */
-    body, h1, h2, h3, p, ul, li, a {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-        text-decoration: none;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f9;
-        color: #333;
-        line-height: 1.6;
-        margin: 0;
-        padding: 0;
-    }
-
-    /* Navigation */
+    /* Navigation bar styled like footer */
     nav {
         background-color: #333;
         color: #fff;
-        padding: 1rem;
+        padding: 1rem 0;
     }
 
-    nav ul {
+    nav .container {
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
+    }
+
+    nav .navbar-brand {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    nav .navbar-nav {
+        display: flex;
         gap: 1rem;
     }
 
-    nav ul li {
+    nav .nav-item {
         list-style: none;
     }
 
-    nav ul li a {
+    nav .nav-link {
         color: #fff;
         text-decoration: none;
         padding: 0.5rem 1rem;
@@ -43,27 +36,51 @@
         transition: background-color 0.3s ease;
     }
 
-    nav ul li a:hover {
+    nav .nav-link:hover {
         background-color: #555;
     }
 </style>
 
-<nav>
-    <ul>
-        <li><a href="{{ path('app_home') }}">Home</a></li>
-
-        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-            <li><a href="{{ path('app_profile') }}">Profile</a></li>
-
-            {% if is_granted('ROLE_ADMIN') %}
-                <li><a href="{{ path('admin') }}">Admin Dashboard</a></li>
-            {% endif %}
-                        <li><a href="{{ path('app_mes_tickets') }}">Register</a></li>
-
-            <li><a href="{{ path('app_logout') }}">Logout</a></li>
-        {% else %}
-            <li><a href="{{ path('app_login') }}">Login</a></li>
-            <li><a href="{{ path('app_register') }}">Register</a></li>
-        {% endif %}
-    </ul>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{{ path('app_home') }}">TICKETMATCH</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="#navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+           
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_contact_index') }}">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_paiement_index') }}">Paiements</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_mes_tickets') }}">Mes Tickets</a>
+                </li>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('admin') }}">Admin Dashboard</a>
+                    </li>
+                {% endif %}
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_profile') }}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_register') }}">Register</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
 </nav>

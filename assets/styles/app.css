@@ -1,3 +1,92 @@
 body {
     background-color: skyblue;
 }
+
+/* Styles communs pour toutes les pages */
+
+/* Styles pour les cartes */
+.card {
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    background-color: white;
+}
+
+.card-header {
+    background-color: var(--primary-color, #007bff);
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* Styles pour les boutons */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary-color, #007bff);
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color, #6c757d);
+    color: white;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* Styles pour les en-têtes */
+.page-title {
+    text-align: center;
+    margin: 2rem 0;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color, #007bff);
+}
+
+/* Styles pour les tables */
+.table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+}
+
+.table th {
+    background-color: var(--primary-color, #007bff);
+    color: white;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f8f9fa;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #e9ecef;
+}

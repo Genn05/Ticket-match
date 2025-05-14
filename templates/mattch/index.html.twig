@@ -63,5 +63,32 @@
     </div>
 </div>
 
-{% include 'partials/footer.html.twig' %}
+<style>
+    .match-card {
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .match-card .card-header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 10px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .vs-badge {
+        background-color: var(--secondary-color);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 50%;
+        font-weight: bold;
+    }
+
+    .btn {
+        margin-right: 5px;
+    }
+</style>
+
 {% endblock %}

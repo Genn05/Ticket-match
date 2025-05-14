@@ -26,11 +26,12 @@ class Paiement
     #[ORM\ManyToOne(targetEntity: Ticket::class, inversedBy: "paiements")]
     private ?Ticket $ticket = null;
 
-    #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: "paiements")]
+    #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'paiements')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Reservation $reservation = null;
 
-    #[ORM\ManyToOne(targetEntity: Card::class)]
-    #[ORM\JoinColumn(name: "card_id", referencedColumnName: "id", nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Card::class, inversedBy: "paiements")]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Card $card = null;
 
     #[ORM\Column(type: "datetime")]
@@ -38,6 +39,12 @@ class Paiement
 
     #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
     private ?string $montant = null;
+
+    #[ORM\Column(type: "string", length: 19, nullable: true)]
+    private ?string $cardNumber = null;
+
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $cardType = null;
 
     // Getters and setters for each property
 
@@ -117,15 +124,31 @@ class Paiement
         return $this->card;
     }
 
-    public function setCard(?Card $card): static
+    public function setCard(?Card $card): self
     {
         $this->card = $card;
         return $this;
     }
 
-    // Optionally: Add a convenience method to get the card number
     public function getCardNumber(): ?string
     {
-        return $this->card ? $this->card->getCardNumber() : null;
+        return $this->cardNumber;
+    }
+
+    public function setCardNumber(?string $cardNumber): self
+    {
+        $this->cardNumber = $cardNumber;
+        return $this;
+    }
+
+    public function getCardType(): ?string
+    {
+        return $this->cardType;
+    }
+
+    public function setCardType(?string $cardType): static
+    {
+        $this->cardType = $cardType;
+        return $this;
     }
 }

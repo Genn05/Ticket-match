@@ -4,9 +4,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Card;
 use App\Entity\Paiement;
 use App\Entity\Reservation;
-use App\Form\PaiementForm;
+use App\Form\PaiementType;
 use App\Repository\PaiementRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,10 +20,10 @@ class PaiementController extends AbstractController
     #[Route('/paiement', name: 'app_paiement_index')]
     public function index(PaiementRepository $paiementRepository): Response
     {
-        // Récupérer tous les paiements
+        // Retrieve all payments
         $paiements = $paiementRepository->findAll();
 
-        // Renvoyer la vue avec les paiements récupérés
+        // Render the view with the retrieved payments
         return $this->render('paiement/index.html.twig', [
             'paiements' => $paiements,
         ]);
@@ -32,25 +33,26 @@ class PaiementController extends AbstractController
     public function effectuerPaiement(
         Request $request,
         EntityManagerInterface $entityManager,
-        \App\Repository\PaiementRepository $paiementRepository,
+        PaiementRepository $paiementRepository,
         int $reservationId
     ): Response {
-        // Récupérer la réservation
+        // Retrieve the reservation
         $reservation = $entityManager->getRepository(Reservation::class)->find($reservationId);
 
         if (!$reservation) {
             throw $this->createNotFoundException('Réservation non trouvée');
         }
 
-        // Vérifiez si le paiement a déjà été effectué
+        // Check if payment has already been made
         $existingPaiements = $paiementRepository->findBy(['reservation' => $reservation]);
         if (count($existingPaiements) > 0) {
-            $this->addFlash('error', 'Le paiement a déjà été effectué pour cette réservation.');
+            $this->addFlash('danger', 'Le paiement a déjà été effectué pour cette réservation.');
             return $this->redirectToRoute('app_home');
         }
 
-        // Créer une nouvelle instance de Paiement
+        // Create a new payment instance
         $paiement = new Paiement();
+        $paiement->setMontant(0.00); // Set a default value for montant
         $paiement->setReservation($reservation);
         $paiement->setUser($this->getUser());
         $paiement->setDatePaiement(new \DateTime());
@@ -58,40 +60,43 @@ class PaiementController extends AbstractController
         $montantTotal = $reservation->getTicket()->getPrix() * $reservation->getQuantite();
         $paiement->setMontant($montantTotal);
 
-        // Créer le formulaire de paiement
-        $form = $this->createForm(PaiementForm::class, $paiement);
+        // Create the payment form
+        $form = $this->createForm(PaiementType::class, $paiement);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Vérifiez le montant du paiement
-            $montantPaye = $paiement->getMontant();
-            if ($montantPaye != $reservation->getTicket()->getPrix() * $reservation->getQuantite()) {
-                $this->addFlash('error', 'Le montant ne correspond pas au prix total du ticket.');
+            // Retrieve the card based on the card number provided in the form
+            $cardNumber = $paiement->getCardNumber();
+            $card = $entityManager->getRepository(Card::class)->findOneBy(['cardNumber' => $cardNumber]);
+
+            if (!$card) {
+                $this->addFlash('error', 'Carte invalide. Veuillez sélectionner une carte valide.');
                 return $this->redirectToRoute('app_paiement', ['reservationId' => $reservationId]);
             }
 
-            // Marquer le paiement comme effectué
+            $paiement->setCard($card);
+
+            // Check if the card balance is sufficient
+            if ($card->getBalance() < $paiement->getMontant()) {
+                $this->addFlash('error', 'Solde insuffisant sur la carte sélectionnée.');
+                return $this->redirectToRoute('app_paiement', ['reservationId' => $reservationId]);
+            }
+
+            // Mark the payment as completed
             $paiement->setStatus('Payé');
 
-            // Mettre à jour l'état de la réservation et du ticket
-            $ticket = $reservation->getTicket();
-            if ($ticket->getQuantite() < $reservation->getQuantite()) {
-                $this->addFlash('error', 'Il n\'y a pas assez de tickets disponibles.');
-                return $this->redirectToRoute('app_paiement', ['reservationId' => $reservationId]);
-            }
+            // Deduct the amount from the card balance
+            $card->setBalance($card->getBalance() - $paiement->getMontant());
 
-            $ticket->setQuantite($ticket->getQuantite() - $reservation->getQuantite()); // Mise à jour du stock de tickets
-
-            // Persist et flush les entités
+            // Persist the changes
             $entityManager->persist($paiement);
-            $entityManager->persist($ticket);
+            $entityManager->persist($card);
             $entityManager->flush();
 
             $this->addFlash('success', 'Paiement effectué avec succès.');
+            // Redirect to 'Mes Tickets' page after successful payment
             return $this->redirectToRoute('app_mes_tickets');
         }
-
-        $this->addFlash('info', 'Veuillez confirmer votre achat.');
 
         return $this->render('paiement/form.html.twig', [
             'form' => $form->createView(),
@@ -106,19 +111,19 @@ class PaiementController extends AbstractController
         EntityManagerInterface $entityManager,
         int $id
     ): Response {
-        // Récupérer le paiement par ID
+        // Retrieve the payment by ID
         $paiement = $paiementRepository->find($id);
 
         if (!$paiement) {
             throw $this->createNotFoundException('Paiement non trouvé');
         }
 
-        // Créer le formulaire pour éditer le paiement
-        $form = $this->createForm(PaiementForm::class, $paiement);
+        // Create the form to edit the payment
+        $form = $this->createForm(PaiementType::class, $paiement);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Sauvegarder les modifications
+            // Save the changes
             $entityManager->flush();
 
             $this->addFlash('success', 'Paiement mis à jour avec succès.');
@@ -134,39 +139,41 @@ class PaiementController extends AbstractController
     #[Route('/paiement/new', name: 'app_paiement_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Créer une nouvelle entité de Paiement
+        // Create a new payment entity
         $paiement = new Paiement();
-        $paiement->setDatePaiement(new \DateTime()); // Définir la date du paiement par défaut
-        $paiement->setStatus('En attente'); // Définir le statut initial
+        $paiement->setMontant(0.00); // Set a default value for montant
+        $paiement->setDatePaiement(new \DateTime());
+        $paiement->setStatus('En attente');
 
-        // Créer le formulaire pour le paiement
-        $form = $this->createForm(PaiementForm::class, $paiement);
+        // Create the form for the payment
+        $form = $this->createForm(PaiementType::class, $paiement);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Persister la nouvelle entité de paiement
+            $card = $paiement->getCard();
+
+            if (!$card) {
+                $this->addFlash('error', 'Veuillez sélectionner une carte valide.');
+                return $this->redirectToRoute('app_paiement_new');
+            }
+
             $entityManager->persist($paiement);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Nouveau paiement créé avec succès.');
-            return $this->redirectToRoute('app_paiement_index'); // Rediriger vers la liste des paiements
+            $this->addFlash('success', 'Paiement créé avec succès.');
+            return $this->redirectToRoute('app_paiement_index');
         }
 
         return $this->render('paiement/new.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-   #[Route('/paiement/show/{id}', name: 'app_paiement_show')]
-public function show(Paiement $paiement): Response
-{
-    if (!$paiement) {
-        throw $this->createNotFoundException('Paiement non trouvé');
+
+    #[Route('/paiement/show/{id}', name: 'app_paiement_show')]
+    public function show(Paiement $paiement): Response
+    {
+        return $this->render('paiement/show.html.twig', [
+            'paiement' => $paiement,
+        ]);
     }
-
-    return $this->render('paiement/show.html.twig', [
-        'paiement' => $paiement,
-    ]);
-}
-
-
 }

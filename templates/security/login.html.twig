@@ -2,6 +2,10 @@
 
 {% block title %}Connexion - TicketMatch{% endblock %}
 
+{% block nav %}
+    {% include 'partials/nav.html.twig' %}
+{% endblock %}
+
 {% block body %}
 <div class="container mt-5" style="max-width: 420px;">
     {% if error %}

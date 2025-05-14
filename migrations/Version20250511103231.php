@@ -20,12 +20,31 @@ final class Version20250511103231 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql(<<<'SQL'
-            DROP INDEX uniq_identifier_email ON user
-        SQL);
-        $this->addSql(<<<'SQL'
-            CREATE UNIQUE INDEX UNIQ_8D93D649E7927C74 ON user (email)
-        SQL);
+        $schemaManager = $this->connection->createSchemaManager();
+        $indexes = $schemaManager->listTableIndexes('user');
+        $indexExists = false;
+        foreach ($indexes as $index) {
+            if ($index->getName() === 'uniq_identifier_email') {
+                $indexExists = true;
+                break;
+            }
+        }
+        if ($indexExists) {
+            $this->addSql("DROP INDEX uniq_identifier_email ON user");
+        }
+
+        // Check if the index 'UNIQ_8D93D649E7927C74' exists before creating it
+        $indexes = $schemaManager->listTableIndexes('user');
+        $indexExists = false;
+        foreach ($indexes as $index) {
+            if ($index->getName() === 'UNIQ_8D93D649E7927C74') {
+                $indexExists = true;
+                break;
+            }
+        }
+        if (!$indexExists) {
+            $this->addSql("CREATE UNIQUE INDEX UNIQ_8D93D649E7927C74 ON user (email)");
+        }
     }
 
     public function down(Schema $schema): void

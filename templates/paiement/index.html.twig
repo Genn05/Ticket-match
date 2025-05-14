@@ -2,6 +2,10 @@
 
 {% block title %}Liste des Paiements{% endblock %}
 
+{% block nav %}
+    {% include 'partials/nav.html.twig' %}
+{% endblock %}
+
 {% block body %}
 <div class="container py-4">
     <h1 class="page-title">💳 Historique des Paiements</h1>
@@ -13,6 +17,7 @@
                     <th>Id</th>
                     <th>Date de Paiement</th>
                     <th>Montant (€)</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -22,6 +27,13 @@
                     <td>{{ paiement.id }}</td>
                     <td>{{ paiement.datePaiement ? paiement.datePaiement|date('d/m/Y H:i') : '' }}</td>
                     <td>{{ paiement.montant }}</td>
+                    <td>
+                        {% if paiement.status == 'Payé' %}
+                            <span class="badge badge-success">Payé</span>
+                        {% else %}
+                            <span class="badge badge-danger">Non Payé</span>
+                        {% endif %}
+                    </td>
                     <td class="actions">
                         {% if paiement.reservation %}
 <a href="{{ path('app_paiement_show', {'id': paiement.id}) }}" class="btn btn-sm btn-outline-primary btn-action">
@@ -35,7 +47,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="4" class="no-records">Aucun paiement trouvé.</td>
+                    <td colspan="5" class="no-records">Aucun paiement trouvé.</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -49,3 +61,5 @@
     </div>
 </div>
 {% endblock %}
+
+

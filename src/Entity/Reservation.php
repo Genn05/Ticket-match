@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ReservationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
@@ -26,6 +28,18 @@ class Reservation
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\ManyToOne(targetEntity: Card::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Card $card = null;
+
+    #[ORM\OneToMany(mappedBy: 'reservation', targetEntity: Paiement::class, cascade: ['persist', 'remove'])]
+    private Collection $paiements;
+
+    public function __construct()
+    {
+        $this->paiements = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -76,6 +90,45 @@ class Reservation
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getCard(): ?Card
+    {
+        return $this->card;
+    }
+
+    public function setCard(?Card $card): static
+    {
+        $this->card = $card;
+
+        return $this;
+    }
+
+    public function getPaiements(): Collection
+    {
+        return $this->paiements;
+    }
+
+    public function addPaiement(Paiement $paiement): static
+    {
+        if (!$this->paiements->contains($paiement)) {
+            $this->paiements->add($paiement);
+            $paiement->setReservation($this);
+        }
+
+        return $this;
+    }
+
+    public function removePaiement(Paiement $paiement): static
+    {
+        if ($this->paiements->removeElement($paiement)) {
+            // Set the owning side to null (unless already changed)
+            if ($paiement->getReservation() === $this) {
+                $paiement->setReservation(null);
+            }
+        }
 
         return $this;
     }

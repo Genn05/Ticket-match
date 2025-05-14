@@ -4,34 +4,30 @@
 
 namespace App\Entity;
 
-use App\Repository\CardRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection; // Import the Collection class
+use App\Entity\User;
 
-#[ORM\Entity(repositoryClass: CardRepository::class)]
+#[ORM\Entity]
 class Card
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
-    #[ORM\Column(length: 19)]
+    #[ORM\Column(type: "string", length: 255, unique: true)]
     private ?string $cardNumber = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(type: "decimal", precision: 10, scale: 2, nullable: false)]
+    private ?string $balance = null;
+
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $cardType = null;
 
-    // Relation inverse pour la relation OneToMany avec Paiement
-    #[ORM\OneToMany(mappedBy: 'card', targetEntity: Paiement::class, orphanRemoval: true)]
-    private Collection $paiements;  // Use Collection type for OneToMany relations
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "cards")]
+    private ?User $user = null;
 
-    public function __construct()
-    {
-        $this->paiements = new ArrayCollection(); // Initialize the collection
-    }
-
+    // Getters and setters
     public function getId(): ?int
     {
         return $this->id;
@@ -42,9 +38,21 @@ class Card
         return $this->cardNumber;
     }
 
-    public function setCardNumber(string $cardNumber): static
+    public function setCardNumber(string $cardNumber): self
     {
         $this->cardNumber = $cardNumber;
+
+        return $this;
+    }
+
+    public function getBalance(): ?string
+    {
+        return $this->balance;
+    }
+
+    public function setBalance(string $balance): self
+    {
+        $this->balance = $balance;
 
         return $this;
     }
@@ -54,45 +62,21 @@ class Card
         return $this->cardType;
     }
 
-    public function setCardType(string $cardType): static
+    public function setCardType(?string $cardType): self
     {
         $this->cardType = $cardType;
 
         return $this;
     }
 
-    // Accessor for the paiements property
-    public function getPaiements(): Collection
+    public function getUser(): ?User
     {
-        return $this->paiements;
+        return $this->user;
     }
 
-    public function setPaiements(Collection $paiements): static
+    public function setUser(?User $user): self
     {
-        $this->paiements = $paiements;
-
-        return $this;
-    }
-
-    // Add or remove Paiement to the collection if needed
-    public function addPaiement(Paiement $paiement): static
-    {
-        if (!$this->paiements->contains($paiement)) {
-            $this->paiements[] = $paiement;
-            $paiement->setCard($this);  // Ensure the reverse relation is set
-        }
-
-        return $this;
-    }
-
-    public function removePaiement(Paiement $paiement): static
-    {
-        if ($this->paiements->removeElement($paiement)) {
-            // Set the owning side to null
-            if ($paiement->getCard() === $this) {
-                $paiement->setCard(null);
-            }
-        }
+        $this->user = $user;
 
         return $this;
     }

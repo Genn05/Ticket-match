@@ -11,6 +11,10 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             transition: transform 0.2s ease-in-out;
+            height: 350px; /* Set a fixed height for all ticket cards */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .ticket-card:hover {
@@ -18,7 +22,7 @@
         }
 
         .ticket-header {
-            background-color: #f8f9fa;
+            background-color: var(--light-color);
             padding: 10px;
             text-align: center;
             font-weight: bold;
@@ -39,7 +43,6 @@
             text-align: center;
         }
 
-    
         .ticket-info {
             display: flex;
             justify-content: space-between;
@@ -48,7 +51,7 @@
         }
 
         .btn-reserve {
-            background-color: #007bff;
+            background-color: var(--primary-color);
             color: #fff;
             border: none;
             padding: 10px;
@@ -59,12 +62,29 @@
         }
 
         .btn-reserve:hover {
-            background-color: #0056b3;
+            background-color: var(--secondary-color);
         }
 
         .empty-message {
             text-align: center;
-            color: #6c757d;
+            color: var(--dark-color);
+        }
+
+        .ticket-type {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(58, 12, 163, 0.2);
+        }
+
+        .ticket-type:hover {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            transform: scale(1.05);
         }
     </style>
 {% endblock %}
@@ -89,9 +109,11 @@
                                 <div class="match-teams">
                                     {{ ticket.mattch.equipeA }} vs {{ ticket.mattch.equipeB }}
                                 </div>
-                                <div class="stadium-info mt-2">
-                                    <i class="fas fa-map-marker-alt me-2 text-muted"></i>
-                                    {{ ticket.mattch.stade.nom }}
+                                <div class="stadium-info mt-3 text-center" style="pointer-events: none;">
+                                    <span class="badge bg-secondary">
+                                        <i class="fas fa-map-marker-alt me-2"></i>
+                                        {{ ticket.mattch.stade.nom }} - {{ ticket.mattch.stade.ville }}
+                                    </span>
                                 </div>
                             </div>
                             
@@ -124,6 +146,5 @@
             {% endfor %}
         </div>
     </div>
-{% include 'partials/footer.html.twig' %}
 
 {% endblock %}
