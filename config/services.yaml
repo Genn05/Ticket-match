@@ -5,6 +5,8 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     upload_directory: '%kernel.project_dir%/public/uploads/images'
+    openai.api_key: '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'
+    openrouter.api_key: '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'
 
 services:
     # default configuration for services in *this* file
@@ -20,6 +22,14 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
+    App\Service\OpenAIService:
+        arguments:
+            $apiKey: '%openai.api_key%'
+
+    App\Service\OpenRouterService:
+        arguments:
+            $apiKey: '%openrouter.api_key%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

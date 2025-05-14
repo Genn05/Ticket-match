@@ -1,0 +1,31 @@
+<form id="ask-form">
+  <input type="text" id="question" placeholder="Pose ta question" required>
+ 
+</form>
+<pre id="response"></pre>
+ <button type="submit">Envoyer</button>
+<script>
+document.getElementById('ask-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const question = document.getElementById('question').value;
+
+  console.log('Question:', question); // Debugging: Log the question before sending
+
+  try {
+    const res = await fetch('/ask', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ question })
+    });
+
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+
+    const data = await res.json();
+    document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+  } catch (error) {
+    document.getElementById('response').textContent = `Erreur : ${error.message}`;
+  }
+});
+</script>

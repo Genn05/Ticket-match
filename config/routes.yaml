@@ -7,3 +7,11 @@ controllers:
 home:
     path: /home
     controller: App\Controller\HomeController::index
+
+ai:
+    path: /ai
+    controller: App\Controller\AIController::prompt
+
+openrouter:
+    path: /openrouter
+    controller: App\Controller\OpenRouterController::prompt

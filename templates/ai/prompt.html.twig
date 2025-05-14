@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Assistant AI{% endblock %}
+
+{% block body %}
+    <h1>Assistant AI</h1>
+
+    <form method="post">
+        <label for="prompt">Entrez votre question :</label>
+        <textarea id="prompt" name="prompt" rows="4" cols="50"></textarea>
+        <br>
+        <button type="submit">Envoyer</button>
+    </form>
+
+    {% if response %}
+        <h2>Réponse :</h2>
+        <pre>{{ response | json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+    {% else %}
+        <h2>Aucune réponse reçue.</h2>
+    {% endif %}
+{% endblock %}

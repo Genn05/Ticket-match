@@ -51,7 +51,7 @@ security:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/reset-password, roles: PUBLIC_ACCESS }
         - { path: ^/reset, roles: PUBLIC_ACCESS }
-
+        - { path: ^/ask, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/$, roles: PUBLIC_ACCESS }
         - { path: ^/placeholder.svg, roles: PUBLIC_ACCESS }

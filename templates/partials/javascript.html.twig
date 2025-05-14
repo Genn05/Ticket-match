@@ -46,68 +46,205 @@
             const themeToggle = document.getElementById('themeToggle');
             const themePanel = document.getElementById('themePanel');
             const themeButtons = document.querySelectorAll('.theme-btn');
-            
-            // Ouvrir/fermer le panneau de thème
-            themeToggle.addEventListener('click', function() {
-                themePanel.classList.toggle('active');
-            });
-            
-            // Fermer le panneau en cliquant ailleurs
-            document.addEventListener('click', function(e) {
-                if (!themePanel.contains(e.target) && e.target !== themeToggle) {
-                    themePanel.classList.remove('active');
-                }
-            });
-            
-            // Changer de thème
-            themeButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Mettre à jour les variables CSS
-                    document.documentElement.style.setProperty('--primary-color', this.getAttribute('data-primary'));
-                    document.documentElement.style.setProperty('--secondary-color', this.getAttribute('data-secondary'));
-                    document.documentElement.style.setProperty('--accent-color', this.getAttribute('data-accent'));
-                    document.documentElement.style.setProperty('--warning-color', this.getAttribute('data-warning'));
-                    
-                    // Mettre à jour la couleur de fond avec des couleurs compatibles
-                    const primaryColor = this.getAttribute('data-primary');
-                    const secondaryColor = this.getAttribute('data-secondary');
-                    const accentColor = this.getAttribute('data-accent');
-                    document.body.style.background = `linear-gradient(135deg, ${primaryColor}, ${accentColor}, ${secondaryColor})`;
-                    
-                    // Mettre à jour le bouton actif
-                    themeButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Sauvegarder le thème dans localStorage
-                    localStorage.setItem('ticketmatch-theme', JSON.stringify({
-                        primary: this.getAttribute('data-primary'),
-                        secondary: this.getAttribute('data-secondary'),
-                        accent: this.getAttribute('data-accent'),
-                        warning: this.getAttribute('data-warning')
-                    }));
+
+            if (themeToggle && themePanel) {
+                // Ouvrir/fermer le panneau de thème
+                themeToggle.addEventListener('click', function() {
+                    console.log('Theme toggle button clicked'); // Debugging: Log when the button is clicked
+                    themePanel.classList.toggle('active');
                 });
-            });
-            
-            // Charger le thème sauvegardé
-            const savedTheme = localStorage.getItem('ticketmatch-theme');
-            if (savedTheme) {
-                const theme = JSON.parse(savedTheme);
-                document.documentElement.style.setProperty('--primary-color', theme.primary);
-                document.documentElement.style.setProperty('--secondary-color', theme.secondary);
-                document.documentElement.style.setProperty('--accent-color', theme.accent);
-                document.documentElement.style.setProperty('--warning-color', theme.warning);
-                
-                // Mettre à jour la couleur de fond
-                document.body.style.background = `linear-gradient(135deg, ${theme.primary}, ${theme.accent}, ${theme.secondary})`;
-                
-                // Trouver et activer le bouton correspondant
-                themeButtons.forEach(button => {
-                    if (button.getAttribute('data-primary') === theme.primary) {
-                        button.classList.add('active');
-                    } else {
-                        button.classList.remove('active');
+
+                // Fermer le panneau en cliquant ailleurs
+                document.addEventListener('click', function(e) {
+                    if (!themePanel.contains(e.target) && e.target !== themeToggle) {
+                        themePanel.classList.remove('active');
                     }
                 });
+
+                // Correction pour s'assurer que tous les boutons de changement de thème fonctionnent
+                if (themeButtons.length > 0) {
+                    themeButtons.forEach(button => {
+                        button.addEventListener('click', function() {
+                            console.log('Theme button clicked:', this); // Debugging: Log the clicked button
+                            // Mettre à jour les variables CSS
+                            document.documentElement.style.setProperty('--primary-color', this.getAttribute('data-primary'));
+                            document.documentElement.style.setProperty('--secondary-color', this.getAttribute('data-secondary'));
+                            document.documentElement.style.setProperty('--accent-color', this.getAttribute('data-accent'));
+                            document.documentElement.style.setProperty('--warning-color', this.getAttribute('data-warning'));
+
+                            // Mettre à jour la couleur de fond avec des couleurs compatibles
+                            const primaryColor = this.getAttribute('data-primary');
+                            const secondaryColor = this.getAttribute('data-secondary');
+                            const accentColor = this.getAttribute('data-accent');
+                            document.body.style.background = `linear-gradient(135deg, ${primaryColor}, ${accentColor}, ${secondaryColor})`;
+
+                            // Mettre à jour le bouton actif
+                            themeButtons.forEach(btn => btn.classList.remove('active'));
+                            this.classList.add('active');
+
+                            // Sauvegarder le thème dans localStorage
+                            localStorage.setItem('ticketmatch-theme', JSON.stringify({
+                                primary: this.getAttribute('data-primary'),
+                                secondary: this.getAttribute('data-secondary'),
+                                accent: this.getAttribute('data-accent'),
+                                warning: this.getAttribute('data-warning')
+                            }));
+                        });
+                    });
+                } else {
+                    console.error('Aucun bouton de thème trouvé'); // Debugging: Log if no buttons are found
+                }
+
+                // Charger le thème sauvegardé
+                const savedTheme = localStorage.getItem('ticketmatch-theme');
+                if (savedTheme) {
+                    const theme = JSON.parse(savedTheme);
+                    document.documentElement.style.setProperty('--primary-color', theme.primary);
+                    document.documentElement.style.setProperty('--secondary-color', theme.secondary);
+                    document.documentElement.style.setProperty('--accent-color', theme.accent);
+                    document.documentElement.style.setProperty('--warning-color', theme.warning);
+
+                    // Mettre à jour la couleur de fond
+                    document.body.style.background = `linear-gradient(135deg, ${theme.primary}, ${theme.accent}, ${theme.secondary})`;
+
+                    // Trouver et activer le bouton correspondant
+                    themeButtons.forEach(button => {
+                        if (button.getAttribute('data-primary') === theme.primary) {
+                            button.classList.add('active');
+                        } else {
+                            button.classList.remove('active');
+                        }
+                    });
+                }
+            } else {
+                console.error('Theme toggle or panel not found'); // Debugging: Log if elements are missing
             }
+
+            // Ajouter le formulaire de chat
+            const chatForm = document.createElement('div');
+            chatForm.classList.add('chat-form-wrapper'); // Add a class for styling
+            chatForm.innerHTML = `
+                <div class="chat-container">
+                    <form id="chat-form">
+                        <input type="text" id="chat-input" placeholder="Pose ta question" required>
+                        <button type="submit">Envoyer</button>
+                    </form>
+                    <pre id="chat-response"></pre>
+                </div>
+            `;
+            document.body.appendChild(chatForm);
+
+            // Ajouter un bouton pour ouvrir/fermer le formulaire de chat
+            const chatToggle = document.createElement('div');
+            chatToggle.classList.add('chat-toggle');
+            chatToggle.innerHTML = '<i class="fas fa-comments"></i>';
+            document.body.appendChild(chatToggle);
+
+            chatToggle.addEventListener('click', function() {
+                console.log('Chat toggle button clicked');
+                const chatContainer = chatForm.querySelector('.chat-container');
+                chatContainer.classList.toggle('active');
+            });
+
+            // Mise à jour du style CSS pour aligner le bloc de chat avec les autres pages
+            const chatStyle = document.createElement('style');
+            chatStyle.textContent = `
+                .chat-container {
+                    display: none;
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    background: var(--primary-background-color, #f9f9f9);
+                    border: 1px solid var(--border-color, #ddd);
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    padding: 15px;
+                    width: 320px;
+                    z-index: 1000;
+                }
+                .chat-container.active {
+                    display: block;
+                }
+                .chat-container form {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                }
+                .chat-container input {
+                    padding: 10px;
+                    border: 1px solid var(--input-border-color, #ccc);
+                    border-radius: 6px;
+                    font-size: 14px;
+                }
+                .chat-container button {
+                    background-color: var(--button-background-color, var(--primary-color));
+                    color: var(--button-text-color, #fff);
+                    border: none;
+                    padding: 10px;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    transition: background-color 0.3s ease;
+                }
+                .chat-container button:hover {
+                    background-color: var(--button-hover-color, var(--secondary-color));
+                }
+                .chat-container pre {
+                    margin-top: 10px;
+                    background: var(--secondary-background-color, #f1f1f1);
+                    padding: 10px;
+                    border-radius: 6px;
+                    overflow-x: auto;
+                    font-size: 14px;
+                    line-height: 1.5;
+                }
+                .chat-toggle {
+                    position: fixed;
+                    bottom: 80px;
+                    right: 20px;
+                    background: var(--primary-color);
+                    color: #fff;
+                    border-radius: 50%;
+                    width: 50px;
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    cursor: pointer;
+                    z-index: 1001;
+                    transition: background-color 0.3s ease;
+                }
+                .chat-toggle:hover {
+                    background: var(--secondary-color);
+                }
+            `;
+            document.head.appendChild(chatStyle);
+
+            document.getElementById('chat-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const question = document.getElementById('chat-input').value;
+
+                try {
+                    const res = await fetch('/ask', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ question })
+                    });
+
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! status: ${res.status}`);
+                    }
+
+                    const data = await res.json();
+                    if (data.response) {
+                        document.getElementById('chat-response').textContent = `Réponse :\n${data.response}`;
+                    } else {
+                        document.getElementById('chat-response').textContent = 'Aucune réponse disponible pour le moment.';
+                    }
+                } catch (error) {
+                    document.getElementById('chat-response').textContent = `Erreur : ${error.message}`;
+                }
+            });
         });
     </script>
