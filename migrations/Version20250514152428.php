@@ -20,9 +20,7 @@ final class Version20250514152428 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql(<<<'SQL'
-            ALTER TABLE paiement ADD card_type VARCHAR(255) DEFAULT NULL
-        SQL);
+      //  $this->addSql(<<<'SQL' ALTER TABLE paiement ADD card_type VARCHAR(255) DEFAULT NULL SQL);
     }
 
     public function down(Schema $schema): void

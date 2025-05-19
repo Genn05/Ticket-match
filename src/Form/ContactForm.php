@@ -3,8 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Contact;
-use App\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,10 +12,24 @@ class ContactForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('sujet')
-            ->add('message')
-            ->add('date')
-            // Removed the 'user' field as it will be set automatically in the controller
+            ->add('sujet', null, [
+                'label' => 'Sujet',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Sujet du message',
+                    'maxlength' => 100,
+                ],
+            ])
+            ->add('message', null, [
+                'label' => 'Message',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Votre message',
+                    'rows' => 5,
+                    'maxlength' => 1000,
+                ],
+            ])
+            // La date est gérée automatiquement, donc on ne l'affiche pas dans le formulaire
         ;
     }
 

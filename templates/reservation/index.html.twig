@@ -2,18 +2,84 @@
 
 {% block title %}Réservation - TicketMatch{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .reservation-container {
+            max-width: 500px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(44, 62, 80, 0.12);
+            padding: 32px 28px 24px 28px;
+        }
+        .reservation-container h1 {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 2.1rem;
+            margin-bottom: 28px;
+            font-weight: 700;
+        }
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            font-weight: 500;
+            color: #444;
+        }
+        .form-group input, .form-group select {
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            padding: 10px 14px;
+            font-size: 1rem;
+            margin-bottom: 16px;
+        }
+        .btn-success {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 10px 0;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+            transition: background 0.2s, transform 0.2s;
+        }
+        .btn-success:hover {
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+            transform: translateY(-2px) scale(1.03);
+        }
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(44, 62, 80, 0.10);
+        }
+        .card-body {
+            padding: 32px 24px 24px 24px;
+        }
+    </style>
+{% endblock %}
+
 {% block main %}
-    <h1 class="mb-4">Réserver un ticket</h1>
-
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">{{ ticket.type }} - {{ ticket.prix }} €</h5>
-            {{ form_start(form) }}
-                {{ form_row(form.quantite) }}
-                <button class="btn btn-success">Valider la réservation</button>
-            {{ form_end(form) }}
+    <div class="reservation-container">
+        <h1 class="mb-4">Réserver un ticket</h1>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ ticket.type }} - {{ ticket.prix }} €</h5>
+                {% if place %}
+                    <div class="alert alert-info mb-3">
+                        <strong>Place/Section sélectionnée :</strong> {{ place }}
+                    </div>
+                {% endif %}
+                {{ form_start(form) }}
+                    {# Suppression du champ quantité, affichage d'un seul ticket par place #}
+                    <button class="btn btn-success">Valider la réservation</button>
+                {{ form_end(form) }}
+            </div>
         </div>
-    </div>
-{% include 'partials/footer.html.twig' %}
 
+    </div>
 {% endblock %}

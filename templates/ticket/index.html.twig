@@ -6,134 +6,211 @@
 
 {% block body %}
 <div class="container py-5">
-    <div class="card">
-        <div class="card-header">
-            <h1 class="text-center">Liste des Tickets</h1>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                {% for ticket in tickets %}
-                    <div class="col-md-4 mb-4">
-                        <div class="card ticket-card">
-                            <div class="card-header ticket-header">
-                                <h5 class="mb-0">{{ ticket.type|capitalize }}</h5>
+    <div class="row">
+        {% for ticket in tickets %}
+            <div class="col-md-4 mb-4">
+                <div class="ticket-card ticket-visual {{ ticket.type|lower }}-visual">
+                    <div class="ticket-header {{ ticket.type|lower }}-header">
+                        <h5 class="mb-0">
+                            <span class="ticket-type-badge {{ ticket.type|lower }}-badge">{{ ticket.type|upper }}</span>
+                        </h5>
+                    </div>
+                    <div class="ticket-body ticket-body-enhanced">
+                        <div class="row align-items-center">
+                            <div class="col-4 text-center">
+                                <div class="ticket-stadium-number">{{ ticket.mattch.stade.id }}</div>
+                                <div class="ticket-stadium-label">STADIUM</div>
                             </div>
-                            <div class="card-body ticket-body custom-card-body">
-                                <div class="match-info"> 
-                                    <div class="match-date mb-2">
-                                        <i class="far fa-calendar-alt me-1"></i> 
-                                        {{ ticket.mattch.dateMatch|date('d/m/Y H:i') }}
-                                    </div>
-
-                                    <div class="match-teams d-flex justify-content-between align-items-center mb-2">
-                                        <div class="text-center">
-                                            <img src="{{ ticket.mattch.imageEquipeDomicile }}" alt="{{ ticket.mattch.equipeA }}" class="img-thumbnail" style="height: 80px;">
-                                            <div>{{ ticket.mattch.equipeA }}</div>
-                                        </div>
-                                        <div class="fw-bold">VS</div>
-                                        <div class="text-center">
-                                            <img src="{{ ticket.mattch.imageEquipeExterieur }}" alt="{{ ticket.mattch.equipeB }}" class="img-thumbnail" style="height: 80px;">
-                                            <div>{{ ticket.mattch.equipeB }}</div>
-                                        </div>
-                                    </div>
+                            <div class="col-4 text-center">
+                                <div class="ticket-sport-icon">
+                                    <i class="fas fa-futbol fa-2x"></i>
                                 </div>
-
-                                <div class="ticket-info d-flex justify-content-between align-items-center mt-3">
-                                    <div>
-                                        <div class="text-muted mb-1">Quantité</div>
-                                        <div class="fw-bold">{{ ticket.quantite }}</div>
-                                    </div>
-                                    <div>
-                                        <div class="text-muted mb-1">Prix</div>
-                                        <div class="ticket-price">{{ ticket.prix }} €</div>
-                                    </div>
-                                </div>
-
-                                <div class="mt-3 d-flex justify-content-between">
-                                    <a href="{{ path('app_ticket_show', {'id': ticket.id}) }}" class="btn btn-outline-primary btn-sm">Voir</a>
-                                    {% if is_granted('ROLE_ADMIN') %}
-                                        <a href="{{ path('app_ticket_edit', {'id': ticket.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                                    {% endif %}
-                                </div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div class="ticket-date-small">{{ ticket.mattch.dateMatch|date('d/m/Y') }}</div>
+                                <div class="ticket-time-small">{{ ticket.mattch.dateMatch|date('H:i') }}</div>
                             </div>
                         </div>
+                        <div class="ticket-main-info mt-3 text-center">
+                            <div class="ticket-title">{{ ticket.mattch.equipeA }} <span class="vs">vs</span> {{ ticket.mattch.equipeB }}</div>
+                            <div class="ticket-stadium-name">{{ ticket.mattch.stade.nom }} - {{ ticket.mattch.stade.ville }}</div>
+                        </div>
+                        <div class="ticket-details mt-3 d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted mb-1">Quantité</div>
+                                <div class="fw-bold">{{ ticket.quantite }}</div>
+                            </div>
+                            <div class="text-end">
+                                <div class="text-muted mb-1">Prix</div>
+                                <div class="ticket-price">{{ ticket.prix }} €</div>
+                            </div>
+                        </div>
+                        <a href="{{ path('app_ticket_show', {'id': ticket.id}) }}" class="btn btn-reserve w-100 mt-2">
+                            <i class="fas fa-ticket-alt me-2"></i> Voir le ticket
+                        </a>
                     </div>
-                {% else %}
-                    <div class="col-12">
-                        <div class="alert alert-info text-center">Aucun ticket trouvé.</div>
-                    </div>
-                {% endfor %}
+                </div>
             </div>
-        </div>
+        {% else %}
+            <div class="col-12">
+                <div class="empty-message">
+                    <i class="fas fa-ticket-alt fa-2x mb-3"></i>
+                    <h4>Aucun ticket trouvé.</h4>
+                    <p class="mb-0">Revenez bientôt pour découvrir nos prochains événements.</p>
+                </div>
+            </div>
+        {% endfor %}
     </div>
+</div>
 
-    {% if is_granted('ROLE_ADMIN') %}
-        <div class="mt-4">
-            <a href="{{ path('app_ticket_new') }}" class="btn btn-success">Créer un nouveau ticket</a>
-        </div>
-    {% endif %}
+{% if is_granted('ROLE_ADMIN') %}
+    <div class="mt-4">
+        <a href="{{ path('app_ticket_new') }}" class="btn btn-success">Créer un nouveau ticket</a>
+    </div>
+{% endif %}
 </div>
 
 {% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
-    <!-- Styles centralisés dans app.css -->
-        .custom-card-body {
-            height: 100%;
-            overflow-y: auto;
-        }
-
-        .ticket-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Style général harmonisé pour tous les thèmes */
+        .ticket-visual, .vip-visual, .standard-visual, .etudiant-visual {
+            background: var(--primary-color, #f5f6fa) !important;
+            color: #e1b12c;
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.10);
             overflow: hidden;
-            transition: transform 0.2s ease-in-out;
+            position: relative;
+            min-height: 220px;
+            border: 1.5px solid var(--secondary-color, #e1b12c);
+            margin-bottom: 22px;
+            transition: box-shadow 0.2s, transform 0.2s;
         }
-
-        .ticket-card:hover {
-            transform: scale(1.05);
+        .ticket-visual:hover {
+            box-shadow: 0 16px 32px rgba(0,0,0,0.18);
+            transform: translateY(-6px) scale(1.02);
         }
-
-        .ticket-header {
-            background-color: var(--light-color);
-            padding: 10px;
+        .ticket-header, .vip-header, .standard-header, .etudiant-header {
+            background: var(--primary-color, #f5f6fa) !important;
+            color: #e1b12c;
+            padding: 16px 0 10px 0;
             text-align: center;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
+            border-bottom: 2.5px dashed var(--secondary-color, #e1b12c);
+            letter-spacing: 2.5px;
+            border-radius: 18px 18px 0 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
-
-        .ticket-body {
-            padding: 15px;
+        .ticket-type-badge {
+            display: inline-block;
+            padding: 0.4em 1.2em;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            background: var(--secondary-color, #e1b12c);
+            color: #273c75;
+            border: 2px solid #fff;
+            margin-bottom: 2px;
         }
-
-        .ticket-price {
+        .ticket-body-enhanced {
+            background: transparent;
+            border-radius: 0 0 18px 18px;
+            box-shadow: none;
+            border-top: none;
+            padding: 20px 16px 16px 16px;
+        }
+        .ticket-stadium-number {
             font-size: 1.5rem;
             font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        .card {
+            color: var(--secondary-color, #3a0ca3);
+            background: rgba(0,0,0,0.04);
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            padding: 2px 12px;
+            margin-bottom: 2px;
         }
-
-        .card-header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 10px;
+        .ticket-stadium-label {
+            font-size: 0.8rem;
+            color: var(--secondary-color, #3a0ca3);
+            letter-spacing: 1px;
+        }
+        .ticket-sport-icon {
+            color: var(--secondary-color, #3a0ca3);
+            margin: 0 auto;
+        }
+        .ticket-date-small, .ticket-time-small {
+            font-size: 1rem;
+            color: var(--secondary-color, #3a0ca3);
+            font-weight: 600;
+        }
+        .ticket-main-info .ticket-title {
+            font-size: 1.25rem;
             font-weight: bold;
+            color: var(--secondary-color, #e1b12c);
+            letter-spacing: 1px;
+        }
+        .ticket-main-info .vs {
+            color: var(--accent-color, #e1b12c);
+            font-weight: 700;
+            margin: 0 6px;
+        }
+        .ticket-main-info .ticket-stadium-name {
+            font-size: 1rem;
+            color: var(--secondary-color, #3a0ca3);
+            margin-top: 2px;
+        }
+        .ticket-details {
+            margin-top: 10px;
+        }
+        .ticket-price {
+            color: var(--accent-color, #e1b12c);
+            background: #f5f6fa;
+            font-weight: bold;
+            border-radius: 8px;
+            padding: 4px 12px;
+            display: inline-block;
+        }
+        .btn-reserve {
+            background-color: var(--accent-color, #e1b12c);
+            color: #273c75;
+            border: none;
+            padding: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: background-color 0.2s, color 0.2s;
+            border-radius: 8px;
+            letter-spacing: 1px;
+            margin-top: 8px;
+        }
+        .btn-reserve:hover {
+            background-color: #fffbe6;
+            color: #273c75;
+        }
+        .empty-message {
             text-align: center;
+            color: #273c75;
         }
-
-        .table {
-            margin-top: 20px;
-        }
-
-        .btn {
-            margin-right: 5px;
+        /* Spécial : touche unique par thème */
+        .theme-blue-purple .ticket-type-badge { background: #e1b12c; color: #e1b12c; }
+        .theme-green-teal .ticket-type-badge { background: #2b9348; color: #fff; }
+        .theme-orange-red .ticket-type-badge { background: #fb8500; color: #fff; }
+        .theme-pink-purple .ticket-type-badge { background: #f72585; color: #fff; }
+        .theme-blue-teal .ticket-type-badge { background: #0077b6; color: #fff; }
+        .theme-black-gold .ticket-type-badge { background: #2b2d42; color: #ffd60a; border: 2px solid #ffd60a; }
+        .theme-green-white .ticket-type-badge { background: #2ecc40; color: #fff; }
+        .theme-red-cyan .ticket-type-badge { background: #e63946; color: #fff; }
+        .theme-standard-site .ticket-type-badge { background: green; color: white; border: 2px solid #green; }
+        @media (max-width: 767px) {
+            .ticket-card, .ticket-visual { height: auto; }
+            .ticket-header { font-size: 1.1rem; padding: 12px 0 8px 0; }
+            .ticket-body-enhanced { padding: 14px 8px 10px 8px; }
         }
     </style>
 {% endblock %}

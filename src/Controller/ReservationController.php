@@ -20,46 +20,55 @@ final class ReservationController extends AbstractController
         Ticket $ticket,
         Request $request,
         EntityManagerInterface $em,
-        Security $security
+        Security $security,
+        \App\Repository\ReservationRepository $reservationRepository
     ): Response {
         // Créer une nouvelle réservation
         $reservation = new Reservation();
         $reservation->setTicket($ticket);
         $reservation->setUser($security->getUser());
         $reservation->setCreatedAt(new \DateTimeImmutable());
+        $reservation->setQuantite(1); // ✅ valeur par défaut
 
         // Créer le formulaire
-        $form = $this->createForm(ReservationFormTypeForm::class, $reservation, [
-            'ticket_quantity' => $ticket->getQuantite(), // Passer la quantité de tickets disponibles au formulaire
-        ]);
+           $form = $this->createForm(ReservationFormTypeForm::class, $reservation, [
+    'ticket_quantity' => $ticket->getQuantite(),
+ // Passer la quantité de tickets disponibles au formulaire
+           ]);
 
         $form->handleRequest($request);
 
+        $place = $request->query->get('place');
         if ($form->isSubmitted() && $form->isValid()) {
-            // Récupérer la quantité demandée depuis le formulaire
             $quantiteDemande = $reservation->getQuantite();
-
-            // Vérifier si la quantité demandée est disponible
             if ($quantiteDemande > $ticket->getQuantite()) {
                 $this->addFlash('danger', 'Il n\'y a pas assez de tickets disponibles.');
                 return $this->redirectToRoute('app_reservation', ['id' => $ticket->getId()]);
             }
-
-            // Mettre à jour la quantité du ticket en fonction du nombre réservé
             $ticket->setQuantite($ticket->getQuantite() - $quantiteDemande);
-
-            // Persist et flush la réservation et la mise à jour de la quantité de ticket
+            // Enregistrer la place sélectionnée dans la réservation
+            if ($place) {
+                $reservation->setPlace($place);
+            }
             $em->persist($reservation);
-            $em->persist($ticket);  // Persist l'entité ticket pour sauvegarder la nouvelle quantité
+            $em->persist($ticket);
             $em->flush();
-
             $this->addFlash('success', 'Réservation effectuée avec succès.');
             return $this->redirectToRoute('app_home');
+        }
+
+        // Récupérer les réservations de l'utilisateur connecté
+        $user = $this->getUser();
+        $reservations = [];
+        if ($user) {
+            $reservations = $reservationRepository->findBy(['user' => $user]);
         }
 
         return $this->render('reservation/index.html.twig', [
             'form' => $form->createView(),
             'ticket' => $ticket,
+            'place' => $place,
+            'reservations' => $reservations,
         ]);
     }
 }

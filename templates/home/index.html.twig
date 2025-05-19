@@ -3,6 +3,7 @@
 {% block title %}Accueil - TicketMatch{% endblock %}
 
 {% block stylesheets %}
+    {{ parent() }}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
         .ticket-card {
@@ -86,19 +87,49 @@
             background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
             transform: scale(1.05);
         }
+
+        .ticket-type-badge {
+            display: inline-block;
+            padding: 0.35em 1.1em;
+            border-radius: 0;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: none;
+            color: #1976d2;
+            border: none;
+            box-shadow: none;
+        }
+        .vip-badge {
+            background: linear-gradient(90deg, #ffd700 60%, #fffbe6 100%);
+            color: #7c5c00;
+            border: 1.5px solid #ffe066;
+        }
+        .standard-badge {
+            background: linear-gradient(90deg, #007bff 60%, #e3f0ff 100%);
+            color: #003366;
+            border: 1.5px solid #90c2ff;
+        }
+        .etudiant-badge {
+            background: linear-gradient(90deg, #43e97b 60%, #38f9d7 100%);
+            color: #006644;
+            border: 1.5px solid #7fffd4;
+        }
     </style>
 {% endblock %}
 
 {% block main %}
     <div class="container py-5">
         <h1 class="page-title text-center">🎟️ Nos Tickets disponibles</h1>
-
         <div class="row">
             {% for ticket in tickets %}
                 <div class="col-md-4 mb-4">
                     <div class="ticket-card">
                         <div class="ticket-header">
-                            <h5 class="mb-0">{{ ticket.type|capitalize }}</h5>
+                            <h5 class="mb-0">
+                                <span class="ticket-type-badge {{ ticket.type|lower }}-badge">{{ ticket.type|capitalize }}</span>
+                            </h5>
                         </div>
                         <div class="ticket-body">
                             <div class="match-info">
@@ -116,8 +147,6 @@
                                     </span>
                                 </div>
                             </div>
-                            
-
                             <div class="ticket-info">
                                 <div>
                                     <div class="text-muted mb-1">Quantité</div>
@@ -128,8 +157,7 @@
                                     <div class="ticket-price">{{ ticket.prix }} €</div>
                                 </div>
                             </div>
-                            
-                            <a href="{{ path('app_reservation', { id: ticket.id }) }}" class="btn btn-reserve w-100">
+                            <a href="{{ path('app_ticket_select', { id: ticket.id }) }}" class="btn btn-reserve w-100">
                                 <i class="fas fa-ticket-alt me-2"></i> Réserver
                             </a>
                         </div>

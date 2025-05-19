@@ -18,10 +18,12 @@ use Symfony\Bundle\SecurityBundle\Security; // Correct namespace for Security cl
 final class ContactController extends AbstractController
 {
     #[Route(name: 'app_contact_index', methods: ['GET'])]
-    public function index(ContactRepository $contactRepository): Response
+    public function index(ContactRepository $contactRepository, Security $security): Response
     {
+        $user = $security->getUser();
+        $contacts = $contactRepository->findBy(['user' => $user]);
         return $this->render('contact/index.html.twig', [
-            'contacts' => $contactRepository->findAll(),
+            'contacts' => $contacts,
         ]);
     }
 
@@ -35,6 +37,10 @@ final class ContactController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // Set the active user as the contact's user
             $contact->setUser($security->getUser());
+            // Set the creation date and time automatically (+1 heure)
+            $date = new \DateTime();
+            $date->modify('+1 hour');
+            $contact->setDate($date);
 
             $entityManager->persist($contact);
             $entityManager->flush();
@@ -66,37 +72,27 @@ final class ContactController extends AbstractController
     #[Route('/{id}', name: 'app_contact_show', methods: ['GET'])]
     public function show(Contact $contact): Response
     {
-        return $this->render('contact/show.html.twig', [
-            'contact' => $contact,
-        ]);
+        throw $this->createAccessDeniedException('La consultation des contacts est désactivée.');
     }
 
     #[Route('/{id}/edit', name: 'app_contact_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Contact $contact, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(ContactForm::class, $contact);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_contact_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('contact/edit.html.twig', [
-            'contact' => $contact,
-            'form' => $form,
-        ]);
+        throw $this->createAccessDeniedException('La modification des contacts est désactivée.');
     }
 
     #[Route('/{id}', name: 'app_contact_delete', methods: ['POST'])]
-    public function delete(Request $request, Contact $contact, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Contact $contact, EntityManagerInterface $entityManager, Security $security): Response
     {
+        // Only allow delete if the contact belongs to the current user or user is admin
+        $user = $security->getUser();
+        if ($contact->getUser() !== $user && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Vous ne pouvez supprimer que vos propres contacts.');
+        }
         if ($this->isCsrfTokenValid('delete'.$contact->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($contact);
             $entityManager->flush();
         }
-
         return $this->redirectToRoute('app_contact_index', [], Response::HTTP_SEE_OTHER);
     }
 }

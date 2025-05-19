@@ -1,0 +1,154 @@
+<svg width="600" height="800" viewBox="0 0 600 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Terrain de football -->
+  <rect x="150" y="200" width="300" height="400" fill="#7ccb5e" stroke="#fff" stroke-width="4"/>
+  <!-- Lignes du terrain -->
+  <rect x="180" y="230" width="240" height="340" fill="none" stroke="#fff" stroke-width="2"/>
+  <circle cx="300" cy="400" r="40" fill="none" stroke="#fff" stroke-width="2"/>
+  <circle cx="300" cy="400" r="2" fill="#fff"/>
+  <!-- Buts -->
+  <rect x="270" y="200" width="60" height="20" fill="none" stroke="#fff" stroke-width="2"/>
+  <rect x="270" y="580" width="60" height="20" fill="none" stroke="#fff" stroke-width="2"/>
+  <!-- Section A (bas) -->
+  <rect x="160" y="650" width="280" height="60" fill="#d8eba2" stroke="#fff" stroke-width="2"/>
+  <text x="300" y="690" font-size="24" text-anchor="middle" fill="#333">A</text>
+  <!-- Chaises section A -->
+  <g>
+    <!-- 5 rows of 10 chaises -->
+    <g>
+      <!-- Ligne 1 -->
+      <circle cx="180" cy="665" r="5" fill="#444"/><circle cx="206" cy="665" r="5" fill="#444"/>
+      <circle cx="232" cy="665" r="5" fill="#444"/><circle cx="258" cy="665" r="5" fill="#444"/>
+      <circle cx="284" cy="665" r="5" fill="#444"/><circle cx="310" cy="665" r="5" fill="#444"/>
+      <circle cx="336" cy="665" r="5" fill="#444"/><circle cx="362" cy="665" r="5" fill="#444"/>
+      <circle cx="388" cy="665" r="5" fill="#444"/><circle cx="414" cy="665" r="5" fill="#444"/>
+      <!-- Ligne 2 -->
+      <circle cx="180" cy="677" r="5" fill="#444"/><circle cx="206" cy="677" r="5" fill="#444"/>
+      <circle cx="232" cy="677" r="5" fill="#444"/><circle cx="258" cy="677" r="5" fill="#444"/>
+      <circle cx="284" cy="677" r="5" fill="#444"/><circle cx="310" cy="677" r="5" fill="#444"/>
+      <circle cx="336" cy="677" r="5" fill="#444"/><circle cx="362" cy="677" r="5" fill="#444"/>
+      <circle cx="388" cy="677" r="5" fill="#444"/><circle cx="414" cy="677" r="5" fill="#444"/>
+      <!-- Ligne 3 -->
+      <circle cx="180" cy="689" r="5" fill="#444"/><circle cx="206" cy="689" r="5" fill="#444"/>
+      <circle cx="232" cy="689" r="5" fill="#444"/><circle cx="258" cy="689" r="5" fill="#444"/>
+      <circle cx="284" cy="689" r="5" fill="#444"/><circle cx="310" cy="689" r="5" fill="#444"/>
+      <circle cx="336" cy="689" r="5" fill="#444"/><circle cx="362" cy="689" r="5" fill="#444"/>
+      <circle cx="388" cy="689" r="5" fill="#444"/><circle cx="414" cy="689" r="5" fill="#444"/>
+      <!-- Ligne 4 -->
+      <circle cx="180" cy="701" r="5" fill="#444"/><circle cx="206" cy="701" r="5" fill="#444"/>
+      <circle cx="232" cy="701" r="5" fill="#444"/><circle cx="258" cy="701" r="5" fill="#444"/>
+      <circle cx="284" cy="701" r="5" fill="#444"/><circle cx="310" cy="701" r="5" fill="#444"/>
+      <circle cx="336" cy="701" r="5" fill="#444"/><circle cx="362" cy="701" r="5" fill="#444"/>
+      <circle cx="388" cy="701" r="5" fill="#444"/><circle cx="414" cy="701" r="5" fill="#444"/>
+      <!-- Ligne 5 -->
+      <circle cx="180" cy="713" r="5" fill="#444"/><circle cx="206" cy="713" r="5" fill="#444"/>
+      <circle cx="232" cy="713" r="5" fill="#444"/><circle cx="258" cy="713" r="5" fill="#444"/>
+      <circle cx="284" cy="713" r="5" fill="#444"/><circle cx="310" cy="713" r="5" fill="#444"/>
+      <circle cx="336" cy="713" r="5" fill="#444"/><circle cx="362" cy="713" r="5" fill="#444"/>
+      <circle cx="388" cy="713" r="5" fill="#444"/><circle cx="414" cy="713" r="5" fill="#444"/>
+    </g>
+  </g>
+  <!-- Section K (haut) -->
+  <rect x="160" y="90" width="280" height="60" fill="#bedb90" stroke="#fff" stroke-width="2"/>
+  <text x="300" y="130" font-size="24" text-anchor="middle" fill="#333">K</text>
+  <!-- Chaises section K -->
+  <g>
+    <g>
+      <!-- 5 rows of 10 chaises (inverted Y) -->
+      <circle cx="180" cy="105" r="5" fill="#444"/><circle cx="206" cy="105" r="5" fill="#444"/>
+      <circle cx="232" cy="105" r="5" fill="#444"/><circle cx="258" cy="105" r="5" fill="#444"/>
+      <circle cx="284" cy="105" r="5" fill="#444"/><circle cx="310" cy="105" r="5" fill="#444"/>
+      <circle cx="336" cy="105" r="5" fill="#444"/><circle cx="362" cy="105" r="5" fill="#444"/>
+      <circle cx="388" cy="105" r="5" fill="#444"/><circle cx="414" cy="105" r="5" fill="#444"/>
+      <circle cx="180" cy="117" r="5" fill="#444"/><circle cx="206" cy="117" r="5" fill="#444"/>
+      <circle cx="232" cy="117" r="5" fill="#444"/><circle cx="258" cy="117" r="5" fill="#444"/>
+      <circle cx="284" cy="117" r="5" fill="#444"/><circle cx="310" cy="117" r="5" fill="#444"/>
+      <circle cx="336" cy="117" r="5" fill="#444"/><circle cx="362" cy="117" r="5" fill="#444"/>
+      <circle cx="388" cy="117" r="5" fill="#444"/><circle cx="414" cy="117" r="5" fill="#444"/>
+      <circle cx="180" cy="129" r="5" fill="#444"/><circle cx="206" cy="129" r="5" fill="#444"/>
+      <circle cx="232" cy="129" r="5" fill="#444"/><circle cx="258" cy="129" r="5" fill="#444"/>
+      <circle cx="284" cy="129" r="5" fill="#444"/><circle cx="310" cy="129" r="5" fill="#444"/>
+      <circle cx="336" cy="129" r="5" fill="#444"/><circle cx="362" cy="129" r="5" fill="#444"/>
+      <circle cx="388" cy="129" r="5" fill="#444"/><circle cx="414" cy="129" r="5" fill="#444"/>
+      <circle cx="180" cy="141" r="5" fill="#444"/><circle cx="206" cy="141" r="5" fill="#444"/>
+      <circle cx="232" cy="141" r="5" fill="#444"/><circle cx="258" cy="141" r="5" fill="#444"/>
+      <circle cx="284" cy="141" r="5" fill="#444"/><circle cx="310" cy="141" r="5" fill="#444"/>
+      <circle cx="336" cy="141" r="5" fill="#444"/><circle cx="362" cy="141" r="5" fill="#444"/>
+      <circle cx="388" cy="141" r="5" fill="#444"/><circle cx="414" cy="141" r="5" fill="#444"/>
+      <circle cx="180" cy="153" r="5" fill="#444"/><circle cx="206" cy="153" r="5" fill="#444"/>
+      <circle cx="232" cy="153" r="5" fill="#444"/><circle cx="258" cy="153" r="5" fill="#444"/>
+      <circle cx="284" cy="153" r="5" fill="#444"/><circle cx="310" cy="153" r="5" fill="#444"/>
+      <circle cx="336" cy="153" r="5" fill="#444"/><circle cx="362" cy="153" r="5" fill="#444"/>
+      <circle cx="388" cy="153" r="5" fill="#444"/><circle cx="414" cy="153" r="5" fill="#444"/>
+    </g>
+  </g>
+  <!-- Section L (gauche) -->
+  <rect x="60" y="200" width="60" height="400" fill="#aed7ed" stroke="#fff" stroke-width="2"/>
+  <text x="90" y="400" font-size="24" text-anchor="middle" fill="#333" transform="rotate(-90 90,400)">L</text>
+  <!-- Chaises section L -->
+  <g>
+    <g>
+      <!-- 5 rows of 10 chaises -->
+      <circle cx="75" cy="220" r="5" fill="#444"/><circle cx="75" cy="248" r="5" fill="#444"/>
+      <circle cx="75" cy="276" r="5" fill="#444"/><circle cx="75" cy="304" r="5" fill="#444"/>
+      <circle cx="75" cy="332" r="5" fill="#444"/><circle cx="75" cy="360" r="5" fill="#444"/>
+      <circle cx="75" cy="388" r="5" fill="#444"/><circle cx="75" cy="416" r="5" fill="#444"/>
+      <circle cx="75" cy="444" r="5" fill="#444"/><circle cx="75" cy="472" r="5" fill="#444"/>
+      <circle cx="87" cy="220" r="5" fill="#444"/><circle cx="87" cy="248" r="5" fill="#444"/>
+      <circle cx="87" cy="276" r="5" fill="#444"/><circle cx="87" cy="304" r="5" fill="#444"/>
+      <circle cx="87" cy="332" r="5" fill="#444"/><circle cx="87" cy="360" r="5" fill="#444"/>
+      <circle cx="87" cy="388" r="5" fill="#444"/><circle cx="87" cy="416" r="5" fill="#444"/>
+      <circle cx="87" cy="444" r="5" fill="#444"/><circle cx="87" cy="472" r="5" fill="#444"/>
+      <circle cx="99" cy="220" r="5" fill="#444"/><circle cx="99" cy="248" r="5" fill="#444"/>
+      <circle cx="99" cy="276" r="5" fill="#444"/><circle cx="99" cy="304" r="5" fill="#444"/>
+      <circle cx="99" cy="332" r="5" fill="#444"/><circle cx="99" cy="360" r="5" fill="#444"/>
+      <circle cx="99" cy="388" r="5" fill="#444"/><circle cx="99" cy="416" r="5" fill="#444"/>
+      <circle cx="99" cy="444" r="5" fill="#444"/><circle cx="99" cy="472" r="5" fill="#444"/>
+      <circle cx="111" cy="220" r="5" fill="#444"/><circle cx="111" cy="248" r="5" fill="#444"/>
+      <circle cx="111" cy="276" r="5" fill="#444"/><circle cx="111" cy="304" r="5" fill="#444"/>
+      <circle cx="111" cy="332" r="5" fill="#444"/><circle cx="111" cy="360" r="5" fill="#444"/>
+      <circle cx="111" cy="388" r="5" fill="#444"/><circle cx="111" cy="416" r="5" fill="#444"/>
+      <circle cx="111" cy="444" r="5" fill="#444"/><circle cx="111" cy="472" r="5" fill="#444"/>
+      <circle cx="123" cy="220" r="5" fill="#444"/><circle cx="123" cy="248" r="5" fill="#444"/>
+      <circle cx="123" cy="276" r="5" fill="#444"/><circle cx="123" cy="304" r="5" fill="#444"/>
+      <circle cx="123" cy="332" r="5" fill="#444"/><circle cx="123" cy="360" r="5" fill="#444"/>
+      <circle cx="123" cy="388" r="5" fill="#444"/><circle cx="123" cy="416" r="5" fill="#444"/>
+      <circle cx="123" cy="444" r="5" fill="#444"/><circle cx="123" cy="472" r="5" fill="#444"/>
+    </g>
+  </g>
+  <!-- Section J (droite) -->
+  <rect x="480" y="200" width="60" height="400" fill="#aed7ed" stroke="#fff" stroke-width="2"/>
+  <text x="510" y="400" font-size="24" text-anchor="middle" fill="#333" transform="rotate(90 510,400)">J</text>
+  <!-- Chaises section J -->
+  <g>
+    <g>
+      <!-- 5 rows of 10 chaises -->
+      <circle cx="495" cy="220" r="5" fill="#444"/><circle cx="495" cy="248" r="5" fill="#444"/>
+      <circle cx="495" cy="276" r="5" fill="#444"/><circle cx="495" cy="304" r="5" fill="#444"/>
+      <circle cx="495" cy="332" r="5" fill="#444"/><circle cx="495" cy="360" r="5" fill="#444"/>
+      <circle cx="495" cy="388" r="5" fill="#444"/><circle cx="495" cy="416" r="5" fill="#444"/>
+      <circle cx="495" cy="444" r="5" fill="#444"/><circle cx="495" cy="472" r="5" fill="#444"/>
+      <circle cx="507" cy="220" r="5" fill="#444"/><circle cx="507" cy="248" r="5" fill="#444"/>
+      <circle cx="507" cy="276" r="5" fill="#444"/><circle cx="507" cy="304" r="5" fill="#444"/>
+      <circle cx="507" cy="332" r="5" fill="#444"/><circle cx="507" cy="360" r="5" fill="#444"/>
+      <circle cx="507" cy="388" r="5" fill="#444"/><circle cx="507" cy="416" r="5" fill="#444"/>
+      <circle cx="507" cy="444" r="5" fill="#444"/><circle cx="507" cy="472" r="5" fill="#444"/>
+      <circle cx="519" cy="220" r="5" fill="#444"/><circle cx="519" cy="248" r="5" fill="#444"/>
+      <circle cx="519" cy="276" r="5" fill="#444"/><circle cx="519" cy="304" r="5" fill="#444"/>
+      <circle cx="519" cy="332" r="5" fill="#444"/><circle cx="519" cy="360" r="5" fill="#444"/>
+      <circle cx="519" cy="388" r="5" fill="#444"/><circle cx="519" cy="416" r="5" fill="#444"/>
+      <circle cx="519" cy="444" r="5" fill="#444"/><circle cx="519" cy="472" r="5" fill="#444"/>
+      <circle cx="531" cy="220" r="5" fill="#444"/><circle cx="531" cy="248" r="5" fill="#444"/>
+      <circle cx="531" cy="276" r="5" fill="#444"/><circle cx="531" cy="304" r="5" fill="#444"/>
+      <circle cx="531" cy="332" r="5" fill="#444"/><circle cx="531" cy="360" r="5" fill="#444"/>
+      <circle cx="531" cy="388" r="5" fill="#444"/><circle cx="531" cy="416" r="5" fill="#444"/>
+      <circle cx="531" cy="444" r="5" fill="#444"/><circle cx="531" cy="472" r="5" fill="#444"/>
+      <circle cx="543" cy="220" r="5" fill="#444"/><circle cx="543" cy="248" r="5" fill="#444"/>
+      <circle cx="543" cy="276" r="5" fill="#444"/><circle cx="543" cy="304" r="5" fill="#444"/>
+      <circle cx="543" cy="332" r="5" fill="#444"/><circle cx="543" cy="360" r="5" fill="#444"/>
+      <circle cx="543" cy="388" r="5" fill="#444"/><circle cx="543" cy="416" r="5" fill="#444"/>
+      <circle cx="543" cy="444" r="5" fill="#444"/><circle cx="543" cy="472" r="5" fill="#444"/>
+    </g>
+  </g>
+  <!-- Légende -->
+  <text x="300" y="780" font-size="16" text-anchor="middle" fill="#333">Plan de stade avec 50 chaises par section</text>
+</svg>

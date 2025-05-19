@@ -24,7 +24,9 @@ class OpenRouterService
             'json' => [
                 'model' => 'openai/gpt-3.5-turbo', // ou mistralai/mistral-7b, etc.
                 'messages' => [
-                    ['role' => 'system', 'content' => 'Tu es un assistant utile.'],
+                    ['role' => 'system', 
+                    'content'=> 'Tu es un assistant spécialisé dans la vente de tickets de matchs de football, concerts et autres événements.'
+                        . 'Tu aides les utilisateurs à trouver des événements, comparer les prix, réserver leurs places et répondre à toutes leurs questions sur les billets.'],
                     ['role' => 'user', 'content' => $prompt],
                 ],
             ],

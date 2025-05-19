@@ -20,8 +20,9 @@ class PaiementController extends AbstractController
     #[Route('/paiement', name: 'app_paiement_index')]
     public function index(PaiementRepository $paiementRepository): Response
     {
-        // Retrieve all payments
-        $paiements = $paiementRepository->findAll();
+        // Afficher uniquement les paiements de l'utilisateur connecté
+        $user = $this->getUser();
+        $paiements = $paiementRepository->findBy(['user' => $user]);
 
         // Render the view with the retrieved payments
         return $this->render('paiement/index.html.twig', [

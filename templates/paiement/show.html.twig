@@ -5,15 +5,49 @@
 
 {% block body %}
 <div class="container py-4">
-    <h1>Détails du Paiement n°{{ paiement.id }}</h1>
-
-    <p><strong>Date de Paiement :</strong> {{ paiement.datePaiement|date('d/m/Y H:i') }}</p>
-    <p><strong>Montant :</strong> {{ paiement.montant }} €</p>
-    <p><strong>Status :</strong> {{ paiement.status }}</p>
-    <p><strong>Réservation :</strong> #{{ paiement.reservation.id }}</p>
-
-    <a href="{{ path('app_paiement_index') }}" class="btn btn-secondary">Retour à la liste des paiements</a>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Détails du Paiement n°{{ paiement.id }}</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><strong>Date de Paiement :</strong></span>
+                            <span>{{ paiement.datePaiement|date('d/m/Y H:i') }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><strong>Montant :</strong></span>
+                            <span class="fw-bold">{{ paiement.montant }} €</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><strong>Status :</strong></span>
+                            {% if paiement.status == 'Payé' %}
+                                <span class="badge bg-success">Payé</span>
+                            {% else %}
+                                <span class="badge bg-danger">Non Payé</span>
+                            {% endif %}
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><strong>Réservation :</strong></span>
+                            <span>#{{ paiement.reservation.id }}</span>
+                        </li>
+                    </ul>
+                    <div class="text-center">
+                        <a href="{{ path('app_paiement_index') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i> Retour à la liste des paiements
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
 {% endblock %}
+
+
 
 

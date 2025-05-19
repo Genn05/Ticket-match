@@ -36,6 +36,9 @@ class Reservation
     #[ORM\OneToMany(mappedBy: 'reservation', targetEntity: Paiement::class, cascade: ['persist', 'remove'])]
     private Collection $paiements;
 
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    private ?string $place = null;
+
     public function __construct()
     {
         $this->paiements = new ArrayCollection();
@@ -129,6 +132,18 @@ class Reservation
                 $paiement->setReservation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPlace(): ?string
+    {
+        return $this->place;
+    }
+
+    public function setPlace(?string $place): static
+    {
+        $this->place = $place;
 
         return $this;
     }

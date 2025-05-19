@@ -184,4 +184,56 @@ public function mesTickets(Security $security, \App\Repository\PaiementRepositor
 
         return $this->redirectToRoute('app_ticket_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    // Page de sélection de place pour un ticket
+    #[Route('/{id}/select', name: 'app_ticket_select', methods: ['GET'])]
+    public function select(Ticket $ticket, ReservationRepository $reservationRepository): Response
+    {
+        // Récupérer toutes les places déjà réservées pour ce ticket
+        $reservedPlaces = $reservationRepository->createQueryBuilder('r')
+            ->select('r.place')
+            ->where('r.ticket = :ticket')
+            ->andWhere('r.place IS NOT NULL')
+            ->setParameter('ticket', $ticket)
+            ->getQuery()
+            ->getSingleColumnResult();
+
+        // Calculer les coordonnées des sections (36 autour du stade)
+        $sectionCoords = array();
+        for ($n = 1; $n <= 36; $n++) {
+            $angle = ($n-1)*10;
+            $rad = $angle * pi() / 180;
+            $x = 450 + 350 * cos($rad);
+            $y = 350 + 260 * sin($rad);
+            $sectionCoords[] = array(
+                'label' => $n,
+                'x' => round($x),
+                'y' => round($y),
+            );
+        }
+
+        // Calculer les coordonnées des places (60 autour du stade)
+        $placeCoords = array();
+        $totalPlaces = 60;
+        for ($i = 0; $i < $totalPlaces; $i++) {
+            $angle = $i * (360 / $totalPlaces);
+            $rad = $angle * pi() / 180;
+            $x = round(450 + 320 * cos($rad));
+            $y = round(350 + 230 * sin($rad));
+            $placeCoords[] = array(
+                'name' => 'P-' . ($i+1),
+                'x' => $x,
+                'y' => $y,
+            );
+        }
+
+        return $this->render('ticket/select.html.twig', [
+            'ticket' => $ticket,
+            'reserved_places' => $reservedPlaces,
+            'section_coords' => $sectionCoords,
+            'place_coords' => $placeCoords,
+        ]);
+    }
+
+ 
 }

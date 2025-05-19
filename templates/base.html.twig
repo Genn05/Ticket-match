@@ -108,8 +108,11 @@
         
         /* Container styling */
         .main-container {
-            min-height: calc(100vh - 76px);
+            min-height: 80vh;
             padding: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
         }
         
         /* Card styling - Amélioré */
@@ -580,9 +583,7 @@
     {% block body %}
     <div class="main-container">
         {% block main %}
-      
-            
-          
+            {{ block('body') }}
         {% endblock %}
     </div>
     {% endblock %}
